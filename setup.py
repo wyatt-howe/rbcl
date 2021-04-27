@@ -216,37 +216,23 @@ README = open("README.rst").read()
 INSTALL = open("INSTALL.rst").read()
 CHANGELOG = open("CHANGELOG.rst").read()
 
+with open("README.rst", "r") as fh:
+    long_description = fh.read()
 
 setup(
-    name=nacl.__title__,
-    version=nacl.__version__,
-    description=nacl.__summary__,
-    long_description="\n".join((README, INSTALL, CHANGELOG)),
-    url=nacl.__uri__,
-    license=nacl.__license__,
-    author=nacl.__author__,
-    author_email=nacl.__email__,
-    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
-    setup_requires=setup_requirements,
-    install_requires=requirements,
-    extras_require={"tests": test_requirements, "docs": docs_requirements},
-    tests_require=test_requirements,
-    package_dir={"": "src"},
-    packages=["nacl", "nacl.pwhash", "nacl.bindings"],
-    ext_package="nacl",
-    cffi_modules=["src/bindings/build.py:ffi"],
-    cmdclass={"build_clib": build_clib, "build_ext": build_ext},
-    distclass=Distribution,
-    zip_safe=False,
-    classifiers=[
-        "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python :: Implementation :: PyPy",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-    ],
+    name="bcl",
+    version="0.1.1",
+    packages=["bcl",],
+    install_requires=["pynacl",],
+    license="MIT",
+    url="https://github.com/nthparty/bcl",
+    author="Andrei Lapets",
+    author_email="a@lapets.io",
+    description="Python library that provides a simple interface "+\
+                "for symmetric (i.e., secret-key) and asymmetric "+\
+                "(i.e., public-key) encryption/decryption primitives.",
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
+    test_suite="nose.collector",
+    tests_require=["nose"],
 )
