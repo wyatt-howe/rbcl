@@ -6,7 +6,7 @@ RbCl supports Python 2.7 and 3.5+ as
 well as PyPy 2.6+.
 
 ### Available Operations
-```
+```shell
 # ECC
 crypto_core_ristretto255_add
 crypto_core_ristretto255_bytes
