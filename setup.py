@@ -223,7 +223,7 @@ setup(
     name="bcl",
     version="0.1.0",
     packages=["rbcl",],
-    license="MIT",
+    license="Apache",
     url="https://github.com/nthparty/rbcl",
     author="Wyatt Howe",
     author_email="whowe@bu.edu",
