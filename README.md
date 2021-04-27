@@ -7,7 +7,7 @@ well as PyPy 2.6+.
 
 The following bindings are made available:
 
-### [Constructors](crypto_scalarmult_ristretto255_BYTES)
+### [Constructors](https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#encoded-element-validation)
 ```
 crypto_core_ristretto255_random
 crypto_core_ristretto255_from_hash
@@ -26,7 +26,7 @@ crypto_core_ristretto255_scalar_reduce
 crypto_core_ristretto255_scalar_sub
 ```
 
-### [Point arithmetic](https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto)
+### [Point arithmetic](https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#scalar-multiplication)
 ```
 crypto_core_ristretto255_add
 crypto_core_ristretto255_sub
