@@ -6,7 +6,6 @@ __pycache__/
 *.egg
 *.egg-info
 .eggs/
-dist
 build
 eggs
 parts
@@ -35,11 +34,10 @@ pip-log.txt
 nacl/_cffi_*.c
 
 # Generate libsodium files
-src/libsodium/**/Makefile
-src/libsodium/config.log
-src/libsodium/config.status
-src/libsodium/libsodium.pc
-src/libsodium/libtool
+rbcl/libsodium/**/Makefile
+rbcl/libsodium/config.log
+rbcl/libsodium/config.status
+rbcl/libsodium/libsodium.pc
+rbcl/libsodium/libtool
 
-# whitelist libsodium's build directory
-!src/libsodium/builds/msvc/build
+.DS_Store
