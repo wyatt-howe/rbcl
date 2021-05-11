@@ -26,4 +26,5 @@ int (*crypto_scalarmult_ed25519_noclamp)(unsigned char *, const unsigned char *,
 int (*crypto_scalarmult_ed25519_base_noclamp)(unsigned char *, const unsigned char *) = NULL;
 #else
 static const int PYNACL_HAS_CRYPTO_SCALARMULT_ED25519 = 1;
+static const int PYNACL_HAS_CRYPTO_SCALARMULT_RISTRETTO255 = 1;  // eventually move to whichever related header in the parent dir
 #endif

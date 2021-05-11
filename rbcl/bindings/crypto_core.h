@@ -45,6 +45,8 @@ void crypto_core_ed25519_scalar_reduce(unsigned char *r, const unsigned char *s)
 
 // Ristretto
 
+static const int PYNACL_HAS_CRYPTO_CORE_RISTRETTO255;
+
 size_t crypto_core_ristretto255_bytes(void);
 size_t crypto_core_ristretto255_hashbytes(void);
 size_t crypto_core_ristretto255_scalarbytes(void);
