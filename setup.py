@@ -65,9 +65,6 @@ sodium = functools.partial(here, "rbcl/libsodium/rbcl/libsodium")
 sys.path.insert(0, abshere("rbcl"))
 
 
-import nacl  # noqa
-
-
 def which(name, flags=os.X_OK):  # Taken from twisted
     result = []
     exts = filter(None, os.environ.get("PATHEXT", "").split(os.pathsep))
@@ -219,7 +216,6 @@ with open("README.rst", "r") as fh:
 setup(
     name="rbcl",
     version="0.1.0",
-    packages=["rbcl",],
     license="Apache",
     url="https://github.com/nthparty/rbcl",
     author="Wyatt Howe",
@@ -233,6 +229,7 @@ setup(
     tests_require=["nose"],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
     package_dir={"": "rbcl"},
+    packages=["rbcl", "rbcl.bindings"],
     ext_package="rbcl",
     cffi_modules=[
         "rbcl/bindings/build.py:ffi",
