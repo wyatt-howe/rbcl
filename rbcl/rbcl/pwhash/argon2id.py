@@ -14,13 +14,13 @@
 from __future__ import absolute_import
 from __future__ import division
 
-import nacl.bindings
-import nacl.encoding
+import rbcl.bindings
+import rbcl.encoding
 
 from . import _argon2
 
 ALG = _argon2.ALG_ARGON2ID13
-STRPREFIX = nacl.bindings.crypto_pwhash_argon2id_STRPREFIX
+STRPREFIX = rbcl.bindings.crypto_pwhash_argon2id_STRPREFIX
 
 SALTBYTES = _argon2.SALTBYTES
 
@@ -34,22 +34,22 @@ BYTES_MAX = _argon2.BYTES_MAX
 
 verify = _argon2.verify
 
-MEMLIMIT_MIN = nacl.bindings.crypto_pwhash_argon2id_MEMLIMIT_MIN
-MEMLIMIT_MAX = nacl.bindings.crypto_pwhash_argon2id_MEMLIMIT_MAX
-OPSLIMIT_MIN = nacl.bindings.crypto_pwhash_argon2id_OPSLIMIT_MIN
-OPSLIMIT_MAX = nacl.bindings.crypto_pwhash_argon2id_OPSLIMIT_MAX
+MEMLIMIT_MIN = rbcl.bindings.crypto_pwhash_argon2id_MEMLIMIT_MIN
+MEMLIMIT_MAX = rbcl.bindings.crypto_pwhash_argon2id_MEMLIMIT_MAX
+OPSLIMIT_MIN = rbcl.bindings.crypto_pwhash_argon2id_OPSLIMIT_MIN
+OPSLIMIT_MAX = rbcl.bindings.crypto_pwhash_argon2id_OPSLIMIT_MAX
 
 OPSLIMIT_INTERACTIVE = (
-    nacl.bindings.crypto_pwhash_argon2id_OPSLIMIT_INTERACTIVE
+    rbcl.bindings.crypto_pwhash_argon2id_OPSLIMIT_INTERACTIVE
 )
 MEMLIMIT_INTERACTIVE = (
-    nacl.bindings.crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE
+    rbcl.bindings.crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE
 )
-OPSLIMIT_SENSITIVE = nacl.bindings.crypto_pwhash_argon2id_OPSLIMIT_SENSITIVE
-MEMLIMIT_SENSITIVE = nacl.bindings.crypto_pwhash_argon2id_MEMLIMIT_SENSITIVE
+OPSLIMIT_SENSITIVE = rbcl.bindings.crypto_pwhash_argon2id_OPSLIMIT_SENSITIVE
+MEMLIMIT_SENSITIVE = rbcl.bindings.crypto_pwhash_argon2id_MEMLIMIT_SENSITIVE
 
-OPSLIMIT_MODERATE = nacl.bindings.crypto_pwhash_argon2id_OPSLIMIT_MODERATE
-MEMLIMIT_MODERATE = nacl.bindings.crypto_pwhash_argon2id_MEMLIMIT_MODERATE
+OPSLIMIT_MODERATE = rbcl.bindings.crypto_pwhash_argon2id_OPSLIMIT_MODERATE
+MEMLIMIT_MODERATE = rbcl.bindings.crypto_pwhash_argon2id_MEMLIMIT_MODERATE
 
 
 def kdf(
@@ -58,7 +58,7 @@ def kdf(
     salt,
     opslimit=OPSLIMIT_SENSITIVE,
     memlimit=MEMLIMIT_SENSITIVE,
-    encoder=nacl.encoding.RawEncoder,
+    encoder=rbcl.encoding.RawEncoder,
 ):
     """
     Derive a ``size`` bytes long key from a caller-supplied
@@ -106,7 +106,7 @@ def kdf(
     """
 
     return encoder.encode(
-        nacl.bindings.crypto_pwhash_alg(
+        rbcl.bindings.crypto_pwhash_alg(
             size, password, salt, opslimit, memlimit, ALG
         )
     )
@@ -130,6 +130,6 @@ def str(
 
     .. versionadded:: 1.2
     """
-    return nacl.bindings.crypto_pwhash_str_alg(
+    return rbcl.bindings.crypto_pwhash_str_alg(
         password, opslimit, memlimit, ALG
     )

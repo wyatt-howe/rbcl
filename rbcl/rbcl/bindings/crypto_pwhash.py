@@ -17,9 +17,9 @@ import sys
 
 from six import integer_types
 
-import nacl.exceptions as exc
-from nacl._sodium import ffi, lib
-from nacl.exceptions import ensure
+import rbcl.exceptions as exc
+from rbcl._sodium import ffi, lib
+from rbcl.exceptions import ensure
 
 
 has_crypto_pwhash_scryptsalsa208sha256 = bool(
@@ -214,7 +214,7 @@ def _check_memory_occupation(n, r, p, maxmem=SCRYPT_MAX_MEM):
     )
 
 
-def nacl_bindings_pick_scrypt_params(opslimit, memlimit):
+def rbcl_bindings_pick_scrypt_params(opslimit, memlimit):
     """Python implementation of libsodium's pickparams"""
 
     if opslimit < 32768:
@@ -265,7 +265,7 @@ def crypto_pwhash_scryptsalsa208sha256_ll(
     :param int maxmem: the maximum available memory available for scrypt's
                        operations
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -318,7 +318,7 @@ def crypto_pwhash_scryptsalsa208sha256_str(
     :param int memlimit:
     :return: serialized key hash, including salt and tuning parameters
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -350,7 +350,7 @@ def crypto_pwhash_scryptsalsa208sha256_str_verify(passwd_hash, passwd):
     :param passwd_hash: bytes
     :param passwd: bytes
     :rtype: boolean
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(

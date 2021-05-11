@@ -14,24 +14,24 @@
 from __future__ import absolute_import
 from __future__ import division
 
-import nacl.bindings
+import rbcl.bindings
 
-_argon2_strbytes_plus_one = nacl.bindings.crypto_pwhash_STRBYTES
-
-PWHASH_SIZE = _argon2_strbytes_plus_one - 1
-SALTBYTES = nacl.bindings.crypto_pwhash_SALTBYTES
-
-PASSWD_MIN = nacl.bindings.crypto_pwhash_PASSWD_MIN
-PASSWD_MAX = nacl.bindings.crypto_pwhash_PASSWD_MAX
+_argon2_strbytes_plus_one = rbcl.bindings.crypto_pwhash_STRBYTES
 
 PWHASH_SIZE = _argon2_strbytes_plus_one - 1
+SALTBYTES = rbcl.bindings.crypto_pwhash_SALTBYTES
 
-BYTES_MAX = nacl.bindings.crypto_pwhash_BYTES_MAX
-BYTES_MIN = nacl.bindings.crypto_pwhash_BYTES_MIN
+PASSWD_MIN = rbcl.bindings.crypto_pwhash_PASSWD_MIN
+PASSWD_MAX = rbcl.bindings.crypto_pwhash_PASSWD_MAX
 
-ALG_ARGON2I13 = nacl.bindings.crypto_pwhash_ALG_ARGON2I13
-ALG_ARGON2ID13 = nacl.bindings.crypto_pwhash_ALG_ARGON2ID13
-ALG_ARGON2_DEFAULT = nacl.bindings.crypto_pwhash_ALG_DEFAULT
+PWHASH_SIZE = _argon2_strbytes_plus_one - 1
+
+BYTES_MAX = rbcl.bindings.crypto_pwhash_BYTES_MAX
+BYTES_MIN = rbcl.bindings.crypto_pwhash_BYTES_MIN
+
+ALG_ARGON2I13 = rbcl.bindings.crypto_pwhash_ALG_ARGON2I13
+ALG_ARGON2ID13 = rbcl.bindings.crypto_pwhash_ALG_ARGON2ID13
+ALG_ARGON2_DEFAULT = rbcl.bindings.crypto_pwhash_ALG_DEFAULT
 
 
 def verify(password_hash, password):
@@ -48,4 +48,4 @@ def verify(password_hash, password):
 
     .. versionadded:: 1.2
     """
-    return nacl.bindings.crypto_pwhash_str_verify(password_hash, password)
+    return rbcl.bindings.crypto_pwhash_str_verify(password_hash, password)

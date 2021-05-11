@@ -12,55 +12,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-The :mod:`nacl.hash` module exposes one-shot interfaces
+The :mod:`rbcl.hash` module exposes one-shot interfaces
 for libsodium selected hash primitives and the constants needed
 for their usage.
 """
 
 from __future__ import absolute_import, division, print_function
 
-import nacl.bindings
-import nacl.encoding
+import rbcl.bindings
+import rbcl.encoding
 
 
-BLAKE2B_BYTES = nacl.bindings.crypto_generichash_BYTES
+BLAKE2B_BYTES = rbcl.bindings.crypto_generichash_BYTES
 """Default digest size for :func:`blake2b` hash"""
-BLAKE2B_BYTES_MIN = nacl.bindings.crypto_generichash_BYTES_MIN
+BLAKE2B_BYTES_MIN = rbcl.bindings.crypto_generichash_BYTES_MIN
 """Minimum allowed digest size for :func:`blake2b` hash"""
-BLAKE2B_BYTES_MAX = nacl.bindings.crypto_generichash_BYTES_MAX
+BLAKE2B_BYTES_MAX = rbcl.bindings.crypto_generichash_BYTES_MAX
 """Maximum allowed digest size for :func:`blake2b` hash"""
-BLAKE2B_KEYBYTES = nacl.bindings.crypto_generichash_KEYBYTES
+BLAKE2B_KEYBYTES = rbcl.bindings.crypto_generichash_KEYBYTES
 """Default size of the ``key`` byte array for :func:`blake2b` hash"""
-BLAKE2B_KEYBYTES_MIN = nacl.bindings.crypto_generichash_KEYBYTES_MIN
+BLAKE2B_KEYBYTES_MIN = rbcl.bindings.crypto_generichash_KEYBYTES_MIN
 """Minimum allowed size of the ``key`` byte array for :func:`blake2b` hash"""
-BLAKE2B_KEYBYTES_MAX = nacl.bindings.crypto_generichash_KEYBYTES_MAX
+BLAKE2B_KEYBYTES_MAX = rbcl.bindings.crypto_generichash_KEYBYTES_MAX
 """Maximum allowed size of the ``key`` byte array for :func:`blake2b` hash"""
-BLAKE2B_SALTBYTES = nacl.bindings.crypto_generichash_SALTBYTES
+BLAKE2B_SALTBYTES = rbcl.bindings.crypto_generichash_SALTBYTES
 """Maximum allowed length of the ``salt`` byte array for
 :func:`blake2b` hash"""
-BLAKE2B_PERSONALBYTES = nacl.bindings.crypto_generichash_PERSONALBYTES
+BLAKE2B_PERSONALBYTES = rbcl.bindings.crypto_generichash_PERSONALBYTES
 """Maximum allowed length of the ``personalization``
 byte array for :func:`blake2b` hash"""
 
-SIPHASH_BYTES = nacl.bindings.crypto_shorthash_siphash24_BYTES
+SIPHASH_BYTES = rbcl.bindings.crypto_shorthash_siphash24_BYTES
 """Size of the :func:`siphash24` digest"""
-SIPHASH_KEYBYTES = nacl.bindings.crypto_shorthash_siphash24_KEYBYTES
+SIPHASH_KEYBYTES = rbcl.bindings.crypto_shorthash_siphash24_KEYBYTES
 """Size of the secret ``key`` used by the :func:`siphash24` MAC"""
 
-SIPHASHX_AVAILABLE = nacl.bindings.has_crypto_shorthash_siphashx24
+SIPHASHX_AVAILABLE = rbcl.bindings.has_crypto_shorthash_siphashx24
 """``True`` if :func:`siphashx24` is available to be called"""
 
-SIPHASHX_BYTES = nacl.bindings.crypto_shorthash_siphashx24_BYTES
+SIPHASHX_BYTES = rbcl.bindings.crypto_shorthash_siphashx24_BYTES
 """Size of the :func:`siphashx24` digest"""
-SIPHASHX_KEYBYTES = nacl.bindings.crypto_shorthash_siphashx24_KEYBYTES
+SIPHASHX_KEYBYTES = rbcl.bindings.crypto_shorthash_siphashx24_KEYBYTES
 """Size of the secret ``key`` used by the :func:`siphashx24` MAC"""
 
-_b2b_hash = nacl.bindings.crypto_generichash_blake2b_salt_personal
-_sip_hash = nacl.bindings.crypto_shorthash_siphash24
-_sip_hashx = nacl.bindings.crypto_shorthash_siphashx24
+_b2b_hash = rbcl.bindings.crypto_generichash_blake2b_salt_personal
+_sip_hash = rbcl.bindings.crypto_shorthash_siphash24
+_sip_hashx = rbcl.bindings.crypto_shorthash_siphashx24
 
 
-def sha256(message, encoder=nacl.encoding.HexEncoder):
+def sha256(message, encoder=rbcl.encoding.HexEncoder):
     """
     Hashes ``message`` with SHA256.
 
@@ -70,10 +70,10 @@ def sha256(message, encoder=nacl.encoding.HexEncoder):
     :returns: The hashed message.
     :rtype: bytes
     """
-    return encoder.encode(nacl.bindings.crypto_hash_sha256(message))
+    return encoder.encode(rbcl.bindings.crypto_hash_sha256(message))
 
 
-def sha512(message, encoder=nacl.encoding.HexEncoder):
+def sha512(message, encoder=rbcl.encoding.HexEncoder):
     """
     Hashes ``message`` with SHA512.
 
@@ -83,7 +83,7 @@ def sha512(message, encoder=nacl.encoding.HexEncoder):
     :returns: The hashed message.
     :rtype: bytes
     """
-    return encoder.encode(nacl.bindings.crypto_hash_sha512(message))
+    return encoder.encode(rbcl.bindings.crypto_hash_sha512(message))
 
 
 def blake2b(
@@ -92,7 +92,7 @@ def blake2b(
     key=b"",
     salt=b"",
     person=b"",
-    encoder=nacl.encoding.HexEncoder,
+    encoder=rbcl.encoding.HexEncoder,
 ):
     """
     Hashes ``data`` with blake2b.
@@ -105,7 +105,7 @@ def blake2b(
                         :const:`BLAKE2B_BYTES`
     :type digest_size: int
     :param key: the key to be set for keyed MAC/PRF usage; if set, the key
-                must be at most :data:`~nacl.hash.BLAKE2B_KEYBYTES_MAX` long
+                must be at most :data:`~rbcl.hash.BLAKE2B_KEYBYTES_MAX` long
     :type key: bytes
     :param salt: an initialization salt at most
                  :const:`BLAKE2B_SALTBYTES` long;
@@ -130,7 +130,7 @@ def blake2b(
 generichash = blake2b
 
 
-def siphash24(message, key=b"", encoder=nacl.encoding.HexEncoder):
+def siphash24(message, key=b"", encoder=rbcl.encoding.HexEncoder):
     """
     Computes a keyed MAC of ``message`` using the short-input-optimized
     siphash-2-4 construction.
@@ -150,7 +150,7 @@ def siphash24(message, key=b"", encoder=nacl.encoding.HexEncoder):
 shorthash = siphash24
 
 
-def siphashx24(message, key=b"", encoder=nacl.encoding.HexEncoder):
+def siphashx24(message, key=b"", encoder=rbcl.encoding.HexEncoder):
     """
     Computes a keyed MAC of ``message`` using the 128 bit variant of the
     siphash-2-4 construction.
@@ -162,7 +162,7 @@ def siphashx24(message, key=b"", encoder=nacl.encoding.HexEncoder):
     :param encoder: A class that is able to encode the hashed message.
     :returns: The hashed message.
     :rtype: bytes(:const:`SIPHASHX_BYTES`)
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
 
     .. versionadded:: 1.2

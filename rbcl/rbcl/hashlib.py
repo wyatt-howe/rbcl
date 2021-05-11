@@ -16,23 +16,23 @@ from __future__ import absolute_import, division, print_function
 
 import binascii
 
-import nacl.bindings
-from nacl.utils import bytes_as_string
+import rbcl.bindings
+from rbcl.utils import bytes_as_string
 
-BYTES = nacl.bindings.crypto_generichash_BYTES
-BYTES_MIN = nacl.bindings.crypto_generichash_BYTES_MIN
-BYTES_MAX = nacl.bindings.crypto_generichash_BYTES_MAX
-KEYBYTES = nacl.bindings.crypto_generichash_KEYBYTES
-KEYBYTES_MIN = nacl.bindings.crypto_generichash_KEYBYTES_MIN
-KEYBYTES_MAX = nacl.bindings.crypto_generichash_KEYBYTES_MAX
-SALTBYTES = nacl.bindings.crypto_generichash_SALTBYTES
-PERSONALBYTES = nacl.bindings.crypto_generichash_PERSONALBYTES
+BYTES = rbcl.bindings.crypto_generichash_BYTES
+BYTES_MIN = rbcl.bindings.crypto_generichash_BYTES_MIN
+BYTES_MAX = rbcl.bindings.crypto_generichash_BYTES_MAX
+KEYBYTES = rbcl.bindings.crypto_generichash_KEYBYTES
+KEYBYTES_MIN = rbcl.bindings.crypto_generichash_KEYBYTES_MIN
+KEYBYTES_MAX = rbcl.bindings.crypto_generichash_KEYBYTES_MAX
+SALTBYTES = rbcl.bindings.crypto_generichash_SALTBYTES
+PERSONALBYTES = rbcl.bindings.crypto_generichash_PERSONALBYTES
 
-SCRYPT_AVAILABLE = nacl.bindings.has_crypto_pwhash_scryptsalsa208sha256
+SCRYPT_AVAILABLE = rbcl.bindings.has_crypto_pwhash_scryptsalsa208sha256
 
-_b2b_init = nacl.bindings.crypto_generichash_blake2b_init
-_b2b_final = nacl.bindings.crypto_generichash_blake2b_final
-_b2b_update = nacl.bindings.crypto_generichash_blake2b_update
+_b2b_init = rbcl.bindings.crypto_generichash_blake2b_init
+_b2b_final = rbcl.bindings.crypto_generichash_blake2b_final
+_b2b_update = rbcl.bindings.crypto_generichash_blake2b_update
 
 
 class blake2b(object):
@@ -119,12 +119,12 @@ def scrypt(password, salt="", n=2 ** 20, r=8, p=1, maxmem=2 ** 25, dklen=64):
     """
     Derive a cryptographic key using the scrypt KDF.
 
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
 
     Implements the same signature as the ``hashlib.scrypt`` implemented
     in cpython version 3.6
     """
-    return nacl.bindings.crypto_pwhash_scryptsalsa208sha256_ll(
+    return rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_ll(
         password, salt, n, r, p, maxmem=maxmem, dklen=dklen
     )

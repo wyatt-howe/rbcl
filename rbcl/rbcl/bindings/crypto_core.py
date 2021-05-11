@@ -14,9 +14,9 @@
 
 from __future__ import absolute_import, division, print_function
 
-from nacl import exceptions as exc
-from nacl._sodium import ffi, lib
-from nacl.exceptions import ensure
+from rbcl import exceptions as exc
+from rbcl._sodium import ffi, lib
+from rbcl.exceptions import ensure
 
 
 has_crypto_core_ed25519 = bool(lib.PYNACL_HAS_CRYPTO_CORE_ED25519)
@@ -43,7 +43,7 @@ def crypto_core_ed25519_is_valid_point(p):
     :type p: bytes
     :return: point validity
     :rtype: bool
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -75,7 +75,7 @@ def crypto_core_ed25519_add(p, q):
     :return: a point on the edwards25519 curve represented as
              a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -116,7 +116,7 @@ def crypto_core_ed25519_sub(p, q):
     :return: a point on the edwards25519 curve represented as
              a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -158,7 +158,7 @@ def crypto_core_ed25519_scalar_invert(s):
     :return: an integer represented as a
               :py:data:`.crypto_core_ed25519_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -194,7 +194,7 @@ def crypto_core_ed25519_scalar_negate(s):
     :return: an integer represented as a
               :py:data:`.crypto_core_ed25519_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -230,7 +230,7 @@ def crypto_core_ed25519_scalar_complement(s):
     :return: an integer represented as a
               :py:data:`.crypto_core_ed25519_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -268,7 +268,7 @@ def crypto_core_ed25519_scalar_add(p, q):
     :return: an integer represented as a
               :py:data:`.crypto_core_ed25519_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -309,7 +309,7 @@ def crypto_core_ed25519_scalar_sub(p, q):
     :return: an integer represented as a
               :py:data:`.crypto_core_ed25519_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -350,7 +350,7 @@ def crypto_core_ed25519_scalar_mul(p, q):
     :return: an integer represented as a
               :py:data:`.crypto_core_ed25519_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(
@@ -388,7 +388,7 @@ def crypto_core_ed25519_scalar_reduce(s):
     :return: an integer represented as a
               :py:data:`.crypto_core_ed25519_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(

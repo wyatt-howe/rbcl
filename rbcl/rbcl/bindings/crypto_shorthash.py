@@ -14,9 +14,9 @@
 
 from __future__ import absolute_import, division, print_function
 
-import nacl.exceptions as exc
-from nacl._sodium import ffi, lib
-from nacl.exceptions import ensure
+import rbcl.exceptions as exc
+from rbcl._sodium import ffi, lib
+from rbcl.exceptions import ensure
 
 
 has_crypto_shorthash_siphashx24 = bool(
@@ -62,7 +62,7 @@ def crypto_shorthash_siphashx24(data, key):
     :param key: len(key) must be equal to
                 :py:data:`.XKEYBYTES` (16)
     :type key: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
     """
     ensure(

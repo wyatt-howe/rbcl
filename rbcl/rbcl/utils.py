@@ -18,8 +18,8 @@ import os
 
 import six
 
-import nacl.bindings
-from nacl import encoding
+import rbcl.bindings
+from rbcl import encoding
 
 
 class EncryptedMessage(bytes):
@@ -79,6 +79,6 @@ def randombytes_deterministic(size, seed, encoder=encoding.RawEncoder):
     :param encoder: The encoder class used to encode the produced bytes
     :rtype: bytes
     """
-    raw_data = nacl.bindings.randombytes_buf_deterministic(size, seed)
+    raw_data = rbcl.bindings.randombytes_buf_deterministic(size, seed)
 
     return encoder.encode(raw_data)

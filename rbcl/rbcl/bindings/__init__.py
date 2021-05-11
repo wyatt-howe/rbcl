@@ -14,7 +14,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-from nacl.bindings.crypto_aead import (
+from rbcl.bindings.crypto_aead import (
     crypto_aead_chacha20poly1305_ABYTES,
     crypto_aead_chacha20poly1305_KEYBYTES,
     crypto_aead_chacha20poly1305_MESSAGEBYTES_MAX,
@@ -37,7 +37,7 @@ from nacl.bindings.crypto_aead import (
     crypto_aead_xchacha20poly1305_ietf_decrypt,
     crypto_aead_xchacha20poly1305_ietf_encrypt,
 )
-from nacl.bindings.crypto_box import (
+from rbcl.bindings.crypto_box import (
     crypto_box,
     crypto_box_BEFORENMBYTES,
     crypto_box_BOXZEROBYTES,
@@ -56,7 +56,7 @@ from nacl.bindings.crypto_box import (
     crypto_box_seal_open,
     crypto_box_seed_keypair,
 )
-from nacl.bindings.crypto_core import (
+from rbcl.bindings.crypto_core import (
     crypto_core_ed25519_BYTES,
     crypto_core_ed25519_NONREDUCEDSCALARBYTES,
     crypto_core_ed25519_SCALARBYTES,
@@ -72,7 +72,7 @@ from nacl.bindings.crypto_core import (
     crypto_core_ed25519_sub,
     has_crypto_core_ed25519,
 )
-from nacl.bindings.crypto_generichash import (
+from rbcl.bindings.crypto_generichash import (
     crypto_generichash_BYTES,
     crypto_generichash_BYTES_MAX,
     crypto_generichash_BYTES_MIN,
@@ -87,7 +87,7 @@ from nacl.bindings.crypto_generichash import (
     generichash_blake2b_salt_personal as crypto_generichash_blake2b_salt_personal,
     generichash_blake2b_update as crypto_generichash_blake2b_update,
 )
-from nacl.bindings.crypto_hash import (
+from rbcl.bindings.crypto_hash import (
     crypto_hash,
     crypto_hash_BYTES,
     crypto_hash_sha256,
@@ -95,7 +95,7 @@ from nacl.bindings.crypto_hash import (
     crypto_hash_sha512,
     crypto_hash_sha512_BYTES,
 )
-from nacl.bindings.crypto_kx import (
+from rbcl.bindings.crypto_kx import (
     crypto_kx_PUBLIC_KEY_BYTES,
     crypto_kx_SECRET_KEY_BYTES,
     crypto_kx_SEED_BYTES,
@@ -105,7 +105,7 @@ from nacl.bindings.crypto_kx import (
     crypto_kx_seed_keypair,
     crypto_kx_server_session_keys,
 )
-from nacl.bindings.crypto_pwhash import (
+from rbcl.bindings.crypto_pwhash import (
     crypto_pwhash_ALG_ARGON2I13,
     crypto_pwhash_ALG_ARGON2ID13,
     crypto_pwhash_ALG_DEFAULT,
@@ -159,9 +159,9 @@ from nacl.bindings.crypto_pwhash import (
     crypto_pwhash_str_alg,
     crypto_pwhash_str_verify,
     has_crypto_pwhash_scryptsalsa208sha256,
-    nacl_bindings_pick_scrypt_params,
+    rbcl_bindings_pick_scrypt_params,
 )
-from nacl.bindings.crypto_scalarmult import (
+from rbcl.bindings.crypto_scalarmult import (
     crypto_scalarmult,
     crypto_scalarmult_BYTES,
     crypto_scalarmult_SCALARBYTES,
@@ -174,7 +174,7 @@ from nacl.bindings.crypto_scalarmult import (
     crypto_scalarmult_ed25519_noclamp,
     has_crypto_scalarmult_ed25519,
 )
-from nacl.bindings.crypto_secretbox import (
+from rbcl.bindings.crypto_secretbox import (
     crypto_secretbox,
     crypto_secretbox_BOXZEROBYTES,
     crypto_secretbox_KEYBYTES,
@@ -184,7 +184,7 @@ from nacl.bindings.crypto_secretbox import (
     crypto_secretbox_ZEROBYTES,
     crypto_secretbox_open,
 )
-from nacl.bindings.crypto_secretstream import (
+from rbcl.bindings.crypto_secretstream import (
     crypto_secretstream_xchacha20poly1305_ABYTES,
     crypto_secretstream_xchacha20poly1305_HEADERBYTES,
     crypto_secretstream_xchacha20poly1305_KEYBYTES,
@@ -201,7 +201,7 @@ from nacl.bindings.crypto_secretstream import (
     crypto_secretstream_xchacha20poly1305_rekey,
     crypto_secretstream_xchacha20poly1305_state,
 )
-from nacl.bindings.crypto_shorthash import (
+from rbcl.bindings.crypto_shorthash import (
     BYTES as crypto_shorthash_siphash24_BYTES,
     KEYBYTES as crypto_shorthash_siphash24_KEYBYTES,
     XBYTES as crypto_shorthash_siphashx24_BYTES,
@@ -210,7 +210,7 @@ from nacl.bindings.crypto_shorthash import (
     crypto_shorthash_siphashx24,
     has_crypto_shorthash_siphashx24,
 )
-from nacl.bindings.crypto_sign import (
+from rbcl.bindings.crypto_sign import (
     crypto_sign,
     crypto_sign_BYTES,
     crypto_sign_PUBLICKEYBYTES,
@@ -229,12 +229,12 @@ from nacl.bindings.crypto_sign import (
     crypto_sign_open,
     crypto_sign_seed_keypair,
 )
-from nacl.bindings.randombytes import (
+from rbcl.bindings.randombytes import (
     randombytes,
     randombytes_buf_deterministic,
 )
-from nacl.bindings.sodium_core import sodium_init
-from nacl.bindings.utils import (
+from rbcl.bindings.sodium_core import sodium_init
+from rbcl.bindings.utils import (
     sodium_add,
     sodium_increment,
     sodium_memcmp,
@@ -436,7 +436,7 @@ __all__ = [
     "crypto_pwhash_scryptsalsa208sha256_ll",
     "crypto_pwhash_scryptsalsa208sha256_str",
     "crypto_pwhash_scryptsalsa208sha256_str_verify",
-    "nacl_bindings_pick_scrypt_params",
+    "rbcl_bindings_pick_scrypt_params",
     "randombytes",
     "randombytes_buf_deterministic",
     "sodium_init",
