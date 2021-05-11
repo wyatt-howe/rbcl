@@ -14,43 +14,43 @@
 from __future__ import absolute_import
 from __future__ import division
 
-import nacl.bindings
-import nacl.encoding
-from nacl import exceptions as exc
-from nacl.exceptions import ensure
+import rbcl.bindings
+import rbcl.encoding
+from rbcl import exceptions as exc
+from rbcl.exceptions import ensure
 
-_strbytes_plus_one = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_STRBYTES
+_strbytes_plus_one = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_STRBYTES
 
-AVAILABLE = nacl.bindings.has_crypto_pwhash_scryptsalsa208sha256
+AVAILABLE = rbcl.bindings.has_crypto_pwhash_scryptsalsa208sha256
 
-STRPREFIX = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_STRPREFIX
+STRPREFIX = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_STRPREFIX
 
-SALTBYTES = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_SALTBYTES
+SALTBYTES = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_SALTBYTES
 
-PASSWD_MIN = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_PASSWD_MIN
-PASSWD_MAX = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_PASSWD_MAX
+PASSWD_MIN = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_PASSWD_MIN
+PASSWD_MAX = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_PASSWD_MAX
 
 PWHASH_SIZE = _strbytes_plus_one - 1
 
-BYTES_MIN = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_BYTES_MIN
-BYTES_MAX = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_BYTES_MAX
+BYTES_MIN = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_BYTES_MIN
+BYTES_MAX = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_BYTES_MAX
 
-MEMLIMIT_MIN = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN
-MEMLIMIT_MAX = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MAX
-OPSLIMIT_MIN = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN
-OPSLIMIT_MAX = nacl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX
+MEMLIMIT_MIN = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN
+MEMLIMIT_MAX = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MAX
+OPSLIMIT_MIN = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN
+OPSLIMIT_MAX = rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX
 
 OPSLIMIT_INTERACTIVE = (
-    nacl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_INTERACTIVE
+    rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_INTERACTIVE
 )
 MEMLIMIT_INTERACTIVE = (
-    nacl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_INTERACTIVE
+    rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_INTERACTIVE
 )
 OPSLIMIT_SENSITIVE = (
-    nacl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_SENSITIVE
+    rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_SENSITIVE
 )
 MEMLIMIT_SENSITIVE = (
-    nacl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_SENSITIVE
+    rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_SENSITIVE
 )
 
 OPSLIMIT_MODERATE = 8 * OPSLIMIT_INTERACTIVE
@@ -63,7 +63,7 @@ def kdf(
     salt,
     opslimit=OPSLIMIT_SENSITIVE,
     memlimit=MEMLIMIT_SENSITIVE,
-    encoder=nacl.encoding.RawEncoder,
+    encoder=rbcl.encoding.RawEncoder,
 ):
     """
     Derive a ``size`` bytes long key from a caller-supplied
@@ -109,7 +109,7 @@ def kdf(
                      :py:const:`.MEMLIMIT_MAX`
     :type memlimit: int
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
 
     .. versionadded:: 1.2
@@ -127,13 +127,13 @@ def kdf(
         raising=exc.ValueError,
     )
 
-    n_log2, r, p = nacl.bindings.nacl_bindings_pick_scrypt_params(
+    n_log2, r, p = rbcl.bindings.rbcl_bindings_pick_scrypt_params(
         opslimit, memlimit
     )
     maxmem = memlimit + (2 ** 16)
 
     return encoder.encode(
-        nacl.bindings.crypto_pwhash_scryptsalsa208sha256_ll(
+        rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_ll(
             password, salt, 2 ** n_log2, r, p, maxmem=maxmem, dklen=size
         )
     )
@@ -154,7 +154,7 @@ def str(
     :param int opslimit:
     :param int memlimit:
     :rtype: bytes
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
 
     .. versionadded:: 1.2
@@ -165,7 +165,7 @@ def str(
         raising=exc.UnavailableError,
     )
 
-    return nacl.bindings.crypto_pwhash_scryptsalsa208sha256_str(
+    return rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_str(
         password, opslimit, memlimit
     )
 
@@ -178,7 +178,7 @@ def verify(password_hash, password):
     :param password_hash: bytes
     :param password: bytes
     :rtype: boolean
-    :raises nacl.exceptions.UnavailableError: If called when using a
+    :raises rbcl.exceptions.UnavailableError: If called when using a
         minimal build of libsodium.
 
     .. versionadded:: 1.2
@@ -192,10 +192,10 @@ def verify(password_hash, password):
     ensure(
         len(password_hash) == PWHASH_SIZE,
         "The password hash must be exactly %s bytes long"
-        % nacl.bindings.crypto_pwhash_scryptsalsa208sha256_STRBYTES,
+        % rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_STRBYTES,
         raising=exc.ValueError,
     )
 
-    return nacl.bindings.crypto_pwhash_scryptsalsa208sha256_str_verify(
+    return rbcl.bindings.crypto_pwhash_scryptsalsa208sha256_str_verify(
         password_hash, password
     )

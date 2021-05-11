@@ -14,7 +14,7 @@
 
 from __future__ import absolute_import
 
-from nacl.exceptions import CryptPrefixError
+from rbcl.exceptions import CryptPrefixError
 
 from . import _argon2, argon2i, argon2id, scrypt
 

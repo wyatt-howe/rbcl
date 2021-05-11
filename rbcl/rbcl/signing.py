@@ -14,14 +14,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import nacl.bindings
-from nacl import encoding
-from nacl import exceptions as exc
-from nacl.public import (
+import rbcl.bindings
+from rbcl import encoding
+from rbcl import exceptions as exc
+from rbcl.public import (
     PrivateKey as _Curve25519_PrivateKey,
     PublicKey as _Curve25519_PublicKey,
 )
-from nacl.utils import StringFixer, random
+from rbcl.utils import StringFixer, random
 
 
 class SignedMessage(bytes):
@@ -67,10 +67,10 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
         if not isinstance(key, bytes):
             raise exc.TypeError("VerifyKey must be created from 32 bytes")
 
-        if len(key) != nacl.bindings.crypto_sign_PUBLICKEYBYTES:
+        if len(key) != rbcl.bindings.crypto_sign_PUBLICKEYBYTES:
             raise exc.ValueError(
                 "The key must be exactly %s bytes long"
-                % nacl.bindings.crypto_sign_PUBLICKEYBYTES,
+                % rbcl.bindings.crypto_sign_PUBLICKEYBYTES,
             )
 
         self._key = key
@@ -84,7 +84,7 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
-        return nacl.bindings.sodium_memcmp(bytes(self), bytes(other))
+        return rbcl.bindings.sodium_memcmp(bytes(self), bytes(other))
 
     def __ne__(self, other):
         return not (self == other)
@@ -93,7 +93,7 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
         """
         Verifies the signature of a signed message, returning the message
         if it has not been tampered with else raising
-        :class:`~nacl.signing.BadSignatureError`.
+        :class:`~rbcl.signing.BadSignatureError`.
 
         :param smessage: [:class:`bytes`] Either the original messaged or a
             signature and message concated together.
@@ -109,13 +109,13 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
             if not isinstance(signature, bytes):
                 raise exc.TypeError(
                     "Verification signature must be created from %d bytes"
-                    % nacl.bindings.crypto_sign_BYTES,
+                    % rbcl.bindings.crypto_sign_BYTES,
                 )
 
-            if len(signature) != nacl.bindings.crypto_sign_BYTES:
+            if len(signature) != rbcl.bindings.crypto_sign_BYTES:
                 raise exc.ValueError(
                     "The signature must be exactly %d bytes long"
-                    % nacl.bindings.crypto_sign_BYTES,
+                    % rbcl.bindings.crypto_sign_BYTES,
                 )
 
             smessage = signature + encoder.decode(smessage)
@@ -123,16 +123,16 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
             # Decode the signed message
             smessage = encoder.decode(smessage)
 
-        return nacl.bindings.crypto_sign_open(smessage, self._key)
+        return rbcl.bindings.crypto_sign_open(smessage, self._key)
 
     def to_curve25519_public_key(self):
         """
-        Converts a :class:`~nacl.signing.VerifyKey` to a
-        :class:`~nacl.public.PublicKey`
+        Converts a :class:`~rbcl.signing.VerifyKey` to a
+        :class:`~rbcl.public.PublicKey`
 
-        :rtype: :class:`~nacl.public.PublicKey`
+        :rtype: :class:`~rbcl.public.PublicKey`
         """
-        raw_pk = nacl.bindings.crypto_sign_ed25519_pk_to_curve25519(self._key)
+        raw_pk = rbcl.bindings.crypto_sign_ed25519_pk_to_curve25519(self._key)
         return _Curve25519_PublicKey(raw_pk)
 
 
@@ -141,17 +141,17 @@ class SigningKey(encoding.Encodable, StringFixer, object):
     Private key for producing digital signatures using the Ed25519 algorithm.
 
     Signing keys are produced from a 32-byte (256-bit) random seed value. This
-    value can be passed into the :class:`~nacl.signing.SigningKey` as a
+    value can be passed into the :class:`~rbcl.signing.SigningKey` as a
     :func:`bytes` whose length is 32.
 
     .. warning:: This **must** be protected and remain secret. Anyone who knows
-        the value of your :class:`~nacl.signing.SigningKey` or it's seed can
+        the value of your :class:`~rbcl.signing.SigningKey` or it's seed can
         masquerade as you.
 
     :param seed: [:class:`bytes`] Random 32-byte value (i.e. private key)
     :param encoder: A class that is able to decode the seed
 
-    :ivar: verify_key: [:class:`~nacl.signing.VerifyKey`] The verify
+    :ivar: verify_key: [:class:`~rbcl.signing.VerifyKey`] The verify
         (i.e. public) key that corresponds with this signing key.
     """
 
@@ -164,13 +164,13 @@ class SigningKey(encoding.Encodable, StringFixer, object):
             )
 
         # Verify that our seed is the proper size
-        if len(seed) != nacl.bindings.crypto_sign_SEEDBYTES:
+        if len(seed) != rbcl.bindings.crypto_sign_SEEDBYTES:
             raise exc.ValueError(
                 "The seed must be exactly %d bytes long"
-                % nacl.bindings.crypto_sign_SEEDBYTES
+                % rbcl.bindings.crypto_sign_SEEDBYTES
             )
 
-        public_key, secret_key = nacl.bindings.crypto_sign_seed_keypair(seed)
+        public_key, secret_key = rbcl.bindings.crypto_sign_seed_keypair(seed)
 
         self._seed = seed
         self._signing_key = secret_key
@@ -185,7 +185,7 @@ class SigningKey(encoding.Encodable, StringFixer, object):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
-        return nacl.bindings.sodium_memcmp(bytes(self), bytes(other))
+        return rbcl.bindings.sodium_memcmp(bytes(self), bytes(other))
 
     def __ne__(self, other):
         return not (self == other)
@@ -193,12 +193,12 @@ class SigningKey(encoding.Encodable, StringFixer, object):
     @classmethod
     def generate(cls):
         """
-        Generates a random :class:`~nacl.signing.SigningKey` object.
+        Generates a random :class:`~rbcl.signing.SigningKey` object.
 
-        :rtype: :class:`~nacl.signing.SigningKey`
+        :rtype: :class:`~rbcl.signing.SigningKey`
         """
         return cls(
-            random(nacl.bindings.crypto_sign_SEEDBYTES),
+            random(rbcl.bindings.crypto_sign_SEEDBYTES),
             encoder=encoding.RawEncoder,
         )
 
@@ -208,11 +208,11 @@ class SigningKey(encoding.Encodable, StringFixer, object):
 
         :param message: [:class:`bytes`] The data to be signed.
         :param encoder: A class that is used to encode the signed message.
-        :rtype: :class:`~nacl.signing.SignedMessage`
+        :rtype: :class:`~rbcl.signing.SignedMessage`
         """
-        raw_signed = nacl.bindings.crypto_sign(message, self._signing_key)
+        raw_signed = rbcl.bindings.crypto_sign(message, self._signing_key)
 
-        crypto_sign_BYTES = nacl.bindings.crypto_sign_BYTES
+        crypto_sign_BYTES = rbcl.bindings.crypto_sign_BYTES
         signature = encoder.encode(raw_signed[:crypto_sign_BYTES])
         message = encoder.encode(raw_signed[crypto_sign_BYTES:])
         signed = encoder.encode(raw_signed)
@@ -221,11 +221,11 @@ class SigningKey(encoding.Encodable, StringFixer, object):
 
     def to_curve25519_private_key(self):
         """
-        Converts a :class:`~nacl.signing.SigningKey` to a
-        :class:`~nacl.public.PrivateKey`
+        Converts a :class:`~rbcl.signing.SigningKey` to a
+        :class:`~rbcl.public.PrivateKey`
 
-        :rtype: :class:`~nacl.public.PrivateKey`
+        :rtype: :class:`~rbcl.public.PrivateKey`
         """
         sk = self._signing_key
-        raw_private = nacl.bindings.crypto_sign_ed25519_sk_to_curve25519(sk)
+        raw_private = rbcl.bindings.crypto_sign_ed25519_sk_to_curve25519(sk)
         return _Curve25519_PrivateKey(raw_private)

@@ -15,9 +15,9 @@ from __future__ import absolute_import, division, print_function
 
 from six import integer_types
 
-import nacl.exceptions as exc
-from nacl._sodium import ffi, lib
-from nacl.exceptions import ensure
+import rbcl.exceptions as exc
+from rbcl._sodium import ffi, lib
+from rbcl.exceptions import ensure
 
 
 def sodium_memcmp(inp1, inp2):
