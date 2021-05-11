@@ -212,15 +212,12 @@ class build_ext(_build_ext):
         return _build_ext.run(self)
 
 
-README = open("README.rst").read()
-INSTALL = open("INSTALL.rst").read()
-CHANGELOG = open("CHANGELOG.rst").read()
 
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="bcl",
+    name="rbcl",
     version="0.1.0",
     packages=["rbcl",],
     license="Apache",
@@ -234,8 +231,9 @@ setup(
     long_description_content_type="text/x-rst",
     test_suite="nose.collector",
     tests_require=["nose"],
-    install_requires=["pynacl",],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+    package_dir={"": "rbcl"},
+    ext_package="rbcl",
     cffi_modules=[
         "rbcl/bindings/build.py:ffi",
     ],
