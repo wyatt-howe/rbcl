@@ -7,40 +7,55 @@ Ristretto group Python binding to
 
 RbCl supports Python 2.7 and 3.5+ as well as PyPy 2.6+.
 
+.. code:: python
+
+    import rbcl.bindings as lib
+
+    x = lib.crypto_core_ristretto255_random()
+    assert lib.crypto_core_ristretto255_is_valid_point(x)
+
+    y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64)
+    assert lib.crypto_core_ristretto255_is_valid_point(y)
+
+    z1 = lib.crypto_core_ristretto255_add(x, y)
+    z2 = lib.crypto_core_ristretto255_add(y, x)
+
+    assert z1 == z2
+
 The following bindings are made available:
 
 `Constructors <https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#encoded-element-validation>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-::
+.. code:: python
 
-    crypto_core_ristretto255_random
-    crypto_core_ristretto255_from_hash
-    crypto_core_ristretto255_is_valid_point
+    crypto_core_ristretto255_random()
+    crypto_core_ristretto255_from_hash(h)
+    crypto_core_ristretto255_is_valid_point(p)
 
 `Scalar arithmetic <https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#scalar-arithmetic-over-l>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-::
+.. code:: python
 
-    crypto_core_ristretto255_scalar_add
-    crypto_core_ristretto255_scalar_complement
-    crypto_core_ristretto255_scalar_invert
-    crypto_core_ristretto255_scalar_mul
-    crypto_core_ristretto255_scalar_negate
-    crypto_core_ristretto255_scalar_random
-    crypto_core_ristretto255_scalar_reduce
-    crypto_core_ristretto255_scalar_sub
+    crypto_core_ristretto255_scalar_add(s1, s2)
+    crypto_core_ristretto255_scalar_sub(s1, s2)
+    crypto_core_ristretto255_scalar_mul(s1, s2)  # NOT scalar mulitplication of a point!
+    crypto_core_ristretto255_scalar_complement(s)
+    crypto_core_ristretto255_scalar_invert(s)
+    crypto_core_ristretto255_scalar_negate(s)
+    crypto_core_ristretto255_scalar_reduce(s)
+    crypto_core_ristretto255_scalar_random()
 
 `Point arithmetic <https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#scalar-multiplication>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-::
+.. code:: python
 
-    crypto_core_ristretto255_add
-    crypto_core_ristretto255_sub
-    crypto_scalarmult_ristretto255
-    crypto_scalarmult_ristretto255_base
+    crypto_core_ristretto255_add(p, q)
+    crypto_core_ristretto255_sub(p, q)
+    crypto_scalarmult_ristretto255(p, s)
+    crypto_scalarmult_ristretto255_base(s)
 
 Constants
 ~~~~~~~~~
