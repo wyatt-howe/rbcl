@@ -13,6 +13,12 @@
  * limitations under the License.
  */
 
+#define crypto_scalarmult_ristretto255_BYTES 32
+#define crypto_scalarmult_ristretto255_SCALARBYTES 32
+
+
+// Ed25519
+
 static const int PYNACL_HAS_CRYPTO_SCALARMULT_ED25519;
 
 size_t crypto_scalarmult_bytes();
@@ -27,3 +33,14 @@ int crypto_scalarmult_ed25519_base(unsigned char *q, const unsigned char *n);
 int crypto_scalarmult_ed25519_noclamp(unsigned char *q, const unsigned char *n,
                                       const unsigned char *p);
 int crypto_scalarmult_ed25519_base_noclamp(unsigned char *q, const unsigned char *n);
+
+
+// Ristretto
+
+static const int PYNACL_HAS_CRYPTO_SCALARMULT_RISTRETTO255;
+
+size_t crypto_scalarmult_ristretto255_bytes(void);
+size_t crypto_scalarmult_ristretto255_scalarbytes(void);
+
+int crypto_scalarmult_ristretto255(unsigned char *q, const unsigned char *n, const unsigned char *p);
+int crypto_scalarmult_ristretto255_base(unsigned char *q, const unsigned char *n);

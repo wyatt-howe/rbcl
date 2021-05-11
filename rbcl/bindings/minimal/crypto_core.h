@@ -36,4 +36,5 @@ void (*crypto_core_ed25519_scalar_mul)(unsigned char *, const unsigned char *,
 void (*crypto_core_ed25519_scalar_reduce)(unsigned char *, const unsigned char *) = NULL;
 #else
 static const int PYNACL_HAS_CRYPTO_CORE_ED25519 = 1;
+static const int PYNACL_HAS_CRYPTO_CORE_RISTRETTO255 = 1;  // eventually move to whichever related header in the parent dir
 #endif
