@@ -82,3 +82,12 @@ Helpers
     sodium_pad
     sodium_unpad
 
+===================================
+Manual installation
+===================================
+
+.. code:: shell
+
+    # Build as a wheel and install
+    python setup.py bdist_wheel
+    python -m pip install --force-reinstall dist/rbcl-*.whl
