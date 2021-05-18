@@ -220,9 +220,7 @@ setup(
     url="https://github.com/nthparty/rbcl",
     author="Wyatt Howe",
     author_email="whowe@bu.edu",
-    description="Python library that provides a simple interface "+\
-                "for symmetric (i.e., secret-key) and asymmetric "+\
-                "(i.e., public-key) encryption/decryption primitives.",
+    description="Python binding to the Ristretto group operations in NaCl.",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     test_suite="nose.collector",

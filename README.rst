@@ -21,6 +21,8 @@ RbCl supports Python 2.7 and 3.5+ as well as PyPy 2.6+.
     z2 = lib.crypto_core_ristretto255_add(y, x)
     assert z1 == z2  # Assert that point addition commutes (in L)
     
+    s1 = lib.crypto_core_ristretto255_scalar_random()
+    s2 = lib.crypto_core_ristretto255_scalar_random()
     w1 = lib.crypto_scalarmult_ristretto255(s1, lib.crypto_scalarmult_ristretto255(s2, x))
     w2 = lib.crypto_scalarmult_ristretto255(s2, lib.crypto_scalarmult_ristretto255(s1, x))
     assert w1 == w2  # Assert that point multiplication (by a scalar) is repeated addition (in L)
