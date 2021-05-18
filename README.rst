@@ -16,11 +16,14 @@ RbCl supports Python 2.7 and 3.5+ as well as PyPy 2.6+.
 
     y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64)
     assert lib.crypto_core_ristretto255_is_valid_point(y)
-
+    
     z1 = lib.crypto_core_ristretto255_add(x, y)
     z2 = lib.crypto_core_ristretto255_add(y, x)
-
-    assert z1 == z2
+    assert z1 == z2  # Assert that point addition commutes (in L)
+    
+    w1 = lib.crypto_scalarmult_ristretto255(s1, lib.crypto_scalarmult_ristretto255(s2, x))
+    w2 = lib.crypto_scalarmult_ristretto255(s2, lib.crypto_scalarmult_ristretto255(s1, x))
+    assert w1 == w2  # Assert that point multiplication (by a scalar) is repeated addition (in L)
 
 The following bindings are made available:
 
@@ -74,6 +77,8 @@ Helpers
 
 ::
 
+    randombytes
+    randombytes_buf_deterministic
     sodium_bin2hex
     sodium_hex2bin
     sodium_base642bin
