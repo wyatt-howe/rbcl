@@ -21,9 +21,6 @@ from rbcl.exceptions import ensure
 
 has_crypto_scalarmult_ristretto255 = bool(lib.PYNACL_HAS_CRYPTO_SCALARMULT_RISTRETTO255)
 
-crypto_scalarmult_BYTES = lib.crypto_scalarmult_bytes()
-crypto_scalarmult_SCALARBYTES = lib.crypto_scalarmult_scalarbytes()
-
 crypto_scalarmult_ristretto255_BYTES = 0
 crypto_scalarmult_ristretto255_SCALARBYTES = 0
 
