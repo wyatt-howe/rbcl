@@ -27,10 +27,6 @@ HEADERS = glob.glob(
     os.path.join(os.path.abspath(os.path.dirname(__file__)), "*.h")
 )
 
-MINIMAL_HEADERS = glob.glob(
-    os.path.join(os.path.abspath(os.path.dirname(__file__)), "minimal", "*.h")
-)
-
 
 # Build our FFI instance
 ffi = FFI()
@@ -49,10 +45,8 @@ if os.getenv("PYNACL_SODIUM_STATIC") is not None:
     source.append("#define SODIUM_STATIC")
 
 source.append("#include <sodium.h>")
-
-for header in MINIMAL_HEADERS:
-    with open(header, "r") as hfile:
-        source.append(hfile.read())
+source.append("static const int PYNACL_HAS_CRYPTO_CORE_RISTRETTO255 = 1;")
+source.append("static const int PYNACL_HAS_CRYPTO_SCALARMULT_RISTRETTO255 = 1;")
 
 if sys.platform == "win32":
     libraries = ["libsodium"]

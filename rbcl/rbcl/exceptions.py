@@ -21,12 +21,6 @@ class CryptoError(Exception):
     """
 
 
-class BadSignatureError(CryptoError):
-    """
-    Raised when the signature was forged or otherwise corrupt.
-    """
-
-
 class RuntimeError(RuntimeError, CryptoError):
     pass
 
@@ -40,14 +34,6 @@ class TypeError(TypeError, CryptoError):
 
 
 class ValueError(ValueError, CryptoError):
-    pass
-
-
-class InvalidkeyError(CryptoError):
-    pass
-
-
-class CryptPrefixError(InvalidkeyError):
     pass
 
 
