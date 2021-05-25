@@ -14,6 +14,7 @@ jobs:
         PYTHON: ["cp35-cp35m"]
     name: "Python ${{ matrix.PYTHON }} for manylinux1"
     steps:
+      - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m pip install virtualenv
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
         run: .venv/bin/pip install -U pip cffi
@@ -99,7 +100,7 @@ jobs:
           architecture: ${{ matrix.WINDOWS.ARCH }}
       - name: Extract libsodium libraries
         run: |
-          Expand-Archive src/libsodium-1.0.18-msvc.zip -DestinationPath c:\
+          Expand-Archive rbcl/libsodium/dist-build/libsodium-1.0.18-msvc.zip -DestinationPath c:\
         shell: powershell
       - name: Add sodium to paths
         run: |
