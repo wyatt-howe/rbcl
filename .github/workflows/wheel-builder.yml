@@ -8,7 +8,7 @@ on:
 jobs:
   manylinux:
     runs-on: ubuntu-latest
-    container: pyca/cryptography-manylinux1:x86_64
+    container: quay.io/pypa/manylinux1_x86_64
     strategy:
       matrix:
         PYTHON: ["cp35-cp35m"]
