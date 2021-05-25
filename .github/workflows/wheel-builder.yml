@@ -18,7 +18,7 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
         run: .venv/bin/pip install -U pip cffi
-      - run: wget https://github.com/nthparty/rbcl/archive/refs/heads/master.zip -O rbcl-0.1.0.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
+      - run: curl https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
 
       - run: |
           REGEX="cp3([0-9])*"
@@ -58,7 +58,7 @@ jobs:
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - run: venv/bin/pip install -U pip wheel cffi
-      - run: venv/bin/pip download rbcl --no-deps --no-binary rbcl && tar zxvf rbcl*.tar.gz && mkdir wheelhouse
+      - run: curl https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir wheelhouse
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
