@@ -17,26 +17,26 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
         run: .venv/bin/pip install -U pip cffi
-      - run: .venv/bin/pip download pynacl==${{ github.event.inputs.version }} --no-deps --no-binary pynacl && tar zxvf PyNaCl*.tar.gz && mkdir tmpwheelhouse
+      - run: .venv/bin/pip download rbcl==${{ github.event.inputs.version }} --no-deps --no-binary rbcl && tar zxvf rbcl*.tar.gz && mkdir tmpwheelhouse
 
       - run: |
           REGEX="cp3([0-9])*"
           if [[ "${{ matrix.PYTHON }}" =~ $REGEX ]]; then
               PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
           fi
-          cd PyNaCl*
-          LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/PyNaCl*.whl ../tmpwheelhouse
-      - run: auditwheel repair tmpwheelhouse/PyNaCl*.whl -w wheelhouse/
-      - run: .venv/bin/pip install pynacl --no-index -f wheelhouse/
+          cd rbcl*
+          LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
+      - run: auditwheel repair tmpwheelhouse/rbcl*.whl -w wheelhouse/
+      - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
-          .venv/bin/python -c "import nacl.signing; key = nacl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)"
+          .venv/bin/python -c "(\"import rbcl.signing; key = rbcl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)\", True)[1]"
 
-      - run: mkdir pynacl-wheelhouse
-      - run: mv wheelhouse/PyNaCl*.whl pynacl-wheelhouse/
+      - run: mkdir rbcl-wheelhouse
+      - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
       - uses: actions/upload-artifact@v1
         with:
-          name: "pynacl-${{ github.event.inputs.version }}-manylinux1-${{ matrix.PYTHON }}"
-          path: pynacl-wheelhouse/
+          name: "rbcl-${{ github.event.inputs.version }}-manylinux1-${{ matrix.PYTHON }}"
+          path: rbcl-wheelhouse/
   macos:
     runs-on: macos-latest
     strategy:
@@ -57,7 +57,7 @@ jobs:
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - run: venv/bin/pip install -U pip wheel cffi
-      - run: venv/bin/pip download pynacl==${{ github.event.inputs.version }} --no-deps --no-binary pynacl && tar zxvf PyNaCl*.tar.gz && mkdir wheelhouse
+      - run: venv/bin/pip download rbcl==${{ github.event.inputs.version }} --no-deps --no-binary rbcl && tar zxvf rbcl*.tar.gz && mkdir wheelhouse
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
@@ -65,21 +65,21 @@ jobs:
                 PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
             fi
 
-            cd PyNaCl*
+            cd rbcl*
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
-                ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/PyNaCl*.whl ../wheelhouse
+                ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
         env:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
-      - run: venv/bin/pip install -f wheelhouse --no-index pynacl
+      - run: venv/bin/pip install -f wheelhouse --no-index rbcl
       - run: |
-          venv/bin/python -c "import nacl.signing; key = nacl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)"
+          venv/bin/python -c "import rbcl.signing; key = rbcl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)"
 
-      - run: mkdir pynacl-wheelhouse
-      - run: mv wheelhouse/PyNaCl*.whl pynacl-wheelhouse/
+      - run: mkdir rbcl-wheelhouse
+      - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
       - uses: actions/upload-artifact@v1
         with:
-          name: "pynacl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
-          path: pynacl-wheelhouse/
+          name: "rbcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
+          path: rbcl-wheelhouse/
   windows:
     runs-on: windows-latest
     strategy:
@@ -110,25 +110,25 @@ jobs:
       - name: Install wheel and our Python dependencies
         run: python -m pip install -U pip wheel cffi
       - name: Download the sdist
-        run: pip download pynacl==${{ github.event.inputs.version }} --no-deps --no-binary pynacl && tar zxvf PyNaCl* && mkdir wheelhouse
+        run: pip download rbcl==${{ github.event.inputs.version }} --no-deps --no-binary rbcl && tar zxvf rbcl* && mkdir wheelhouse
         shell: bash
       - name: Build the wheel
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" -no_logo -arch=${{ matrix.WINDOWS.VS_ARCH }}
-          cd PyNaCl* && python setup.py bdist_wheel  --py-limited-api=${{ matrix.PYTHON.ABI_VERSION }} && mv dist/PyNaCl*.whl ../wheelhouse
+          cd rbcl* && python setup.py bdist_wheel  --py-limited-api=${{ matrix.PYTHON.ABI_VERSION }} && mv dist/rbcl*.whl ../wheelhouse
         shell: cmd
         env:
-          PYNACL_SODIUM_LIBRARY_NAME: sodium
-          PYNACL_SODIUM_STATIC: 1
+          rbcl_SODIUM_LIBRARY_NAME: sodium
+          rbcl_SODIUM_STATIC: 1
           SODIUM_INSTALL: system
       - name: Test installing the wheel
-        run: pip install -f wheelhouse pynacl --no-index
+        run: pip install -f wheelhouse rbcl --no-index
       - name: Test the installed wheel
         run: |
-          python -c "import nacl.signing; key = nacl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)"
-      - run: mkdir pynacl-wheelhouse
-      - run: move wheelhouse\PyNaCl*.whl pynacl-wheelhouse\
+          python -c "import rbcl.signing; key = rbcl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)"
+      - run: mkdir rbcl-wheelhouse
+      - run: move wheelhouse\rbcl*.whl rbcl-wheelhouse\
       - uses: actions/upload-artifact@v1
         with:
-          name: "pynacl-${{ github.event.inputs.version }}-win-${{ matrix.WINDOWS.ARCH }}-${{ matrix.PYTHON.VERSION }}"
-          path: pynacl-wheelhouse\
+          name: "rbcl-${{ github.event.inputs.version }}-win-${{ matrix.WINDOWS.ARCH }}-${{ matrix.PYTHON.VERSION }}"
+          path: rbcl-wheelhouse\
