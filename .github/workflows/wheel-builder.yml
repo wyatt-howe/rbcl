@@ -18,14 +18,14 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
         run: .venv/bin/pip install -U pip cffi
-      - run: curl https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
+      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
 
       - run: |
           REGEX="cp3([0-9])*"
           if [[ "${{ matrix.PYTHON }}" =~ $REGEX ]]; then
               PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
           fi
-          cd rbcl*
+          cd rbcl-master
           LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
       - run: auditwheel repair tmpwheelhouse/rbcl*.whl -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
@@ -58,7 +58,7 @@ jobs:
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - run: venv/bin/pip install -U pip wheel cffi
-      - run: curl https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir wheelhouse
+      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir wheelhouse
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
@@ -66,7 +66,7 @@ jobs:
                 PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
             fi
 
-            cd rbcl*
+            cd rbcl-master
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
         env:
@@ -116,7 +116,7 @@ jobs:
       - name: Build the wheel
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" -no_logo -arch=${{ matrix.WINDOWS.VS_ARCH }}
-          cd rbcl* && python setup.py bdist_wheel  --py-limited-api=${{ matrix.PYTHON.ABI_VERSION }} && mv dist/rbcl*.whl ../wheelhouse
+          cd rbcl-master && python setup.py bdist_wheel  --py-limited-api=${{ matrix.PYTHON.ABI_VERSION }} && mv dist/rbcl*.whl ../wheelhouse
         shell: cmd
         env:
           rbcl_SODIUM_LIBRARY_NAME: sodium
