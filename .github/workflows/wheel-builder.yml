@@ -27,7 +27,7 @@ jobs:
           fi
           cd rbcl-master
           LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
-      - run: cd ..; auditwheel repair tmpwheelhouse/rbcl-0.1.0-cp3*-linux_x86_64.whl --plat linux_x86_64 -w wheelhouse/
+      - run: ls ..; ls .; auditwheel repair tmpwheelhouse/rbcl-0.1.0-cp35-abi3-linux_x86_64.whl --plat linux_x86_64 -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
           .venv/bin/python -c "(\"import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
