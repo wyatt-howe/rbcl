@@ -27,7 +27,7 @@ jobs:
           fi
           cd rbcl-master
           LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
-      - run: auditwheel repair tmpwheelhouse/rbcl*.whl -w wheelhouse/
+      - run: cd ..; auditwheel repair tmpwheelhouse/rbcl*.whl --plat linux_x86_64 -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
           .venv/bin/python -c "(\"import rbcl.signing; key = rbcl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)\", True)[1]"
