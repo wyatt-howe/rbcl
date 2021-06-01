@@ -127,7 +127,7 @@ jobs:
         run: pip install -f wheelhouse rbcl --no-index
       - name: Test the installed wheel
         run: |
-          python -c "import rbcl.signing; key = rbcl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)"
+          python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
       - run: mkdir rbcl-wheelhouse
       - run: move wheelhouse\rbcl*.whl rbcl-wheelhouse\
       - uses: actions/upload-artifact@v1
