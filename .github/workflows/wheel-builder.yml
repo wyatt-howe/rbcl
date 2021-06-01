@@ -30,7 +30,7 @@ jobs:
       - run: ls ..; ls .; auditwheel repair tmpwheelhouse/rbcl-0.1.0-cp35-abi3-linux_x86_64.whl --plat linux_x86_64 -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
-          .venv/bin/python -c "(\"import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+          .venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
 
       - run: mkdir rbcl-wheelhouse
       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
