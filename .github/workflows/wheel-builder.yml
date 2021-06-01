@@ -30,7 +30,7 @@ jobs:
       - run: cd ..; auditwheel repair tmpwheelhouse/rbcl*.whl --plat linux_x86_64 -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
-          .venv/bin/python -c "(\"import rbcl.signing; key = rbcl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)\", True)[1]"
+          .venv/bin/python -c "(\"import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
 
       - run: mkdir rbcl-wheelhouse
       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
@@ -69,11 +69,12 @@ jobs:
             cd rbcl-master
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
+            cd ..
         env:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
       - run: venv/bin/pip install -f wheelhouse --no-index rbcl
       - run: |
-          venv/bin/python -c "import rbcl.signing; key = rbcl.signing.SigningKey.generate();signature = key.sign(b'test'); key.verify_key.verify(signature)"
+          venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
 
       - run: mkdir rbcl-wheelhouse
       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
