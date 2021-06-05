@@ -101,6 +101,10 @@ jobs:
         with:
           python-version: ${{ matrix.PYTHON.VERSION }}
           architecture: ${{ matrix.WINDOWS.ARCH }}
+      - name: Ls Dir
+        run: |
+          ls .; ls rbcl
+        shell: bash
       - name: Extract libsodium libraries
         run: |
           Expand-Archive rbcl/libsodium/dist-build/libsodium-1.0.18-msvc.zip -DestinationPath c:\
