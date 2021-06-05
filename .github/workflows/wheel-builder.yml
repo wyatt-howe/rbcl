@@ -18,7 +18,7 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
         run: .venv/bin/pip install -U pip cffi
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
+      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
 
       - run: |
           REGEX="cp3([0-9])*"
@@ -28,7 +28,7 @@ jobs:
           cd rbcl-master
           rm -f dist/*.*
           LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
-      - run: ls ..; ls .; auditwheel repair tmpwheelhouse/rbcl-0.1.0-cp35-abi3-linux_x86_64.whl -w wheelhouse/
+      - run: ls ..; ls .; auditwheel repair tmpwheelhouse/rbcl-${{ github.event.inputs.version }}-cp35-abi3-linux_x86_64.whl -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
           .venv/bin/python -c "import rbcl.bindings as lib; print(lib.crypto_core_ristretto255_is_valid_point(lib.crypto_core_ristretto255_random()))"
@@ -36,7 +36,7 @@ jobs:
       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
       - uses: actions/upload-artifact@v1
         with:
-          name: "rbcl-0.1.1-manylinux1-${{ matrix.PYTHON }}"
+          name: "rbcl-${{ github.event.inputs.version }}-manylinux1-${{ matrix.PYTHON }}"
           path: rbcl-wheelhouse/
   macos:
     runs-on: macos-latest
@@ -58,7 +58,7 @@ jobs:
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - run: venv/bin/pip install -U pip wheel cffi
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-0.1.1.zip && unzip rbcl*.zip && mkdir wheelhouse
+      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
@@ -81,5 +81,5 @@ jobs:
       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
       - uses: actions/upload-artifact@v1
         with:
-          name: "rbcl-0.1.1-macOS-${{ matrix.PYTHON.VERSION }}"
+          name: "rbcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
           path: rbcl-wheelhouse/
