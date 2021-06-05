@@ -18,7 +18,7 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m pip install virtualenv
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
-        run: .venv/bin/pip install -U pip cffi
+        run: .venv/bin/pip install -U pip cffi six
       - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
 
       - run: |
@@ -58,7 +58,7 @@ jobs:
           PYTHON_DOWNLOAD_URL: ${{ matrix.PYTHON.DOWNLOAD_URL }}
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
-      - run: venv/bin/pip install -U pip wheel cffi
+      - run: venv/bin/pip install -U pip wheel cffi six
       - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
       - name: Build the wheel
         run: |
