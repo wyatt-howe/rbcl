@@ -28,10 +28,10 @@ jobs:
           cd rbcl-master
           rm -f dist/*.*
           LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
-      - run: ls ..; ls .; auditwheel repair tmpwheelhouse/rbcl-0.1.0-cp35-abi3-linux_x86_64.whl --plat linux_x86_64 -w wheelhouse/
+      - run: ls ..; ls .; auditwheel repair tmpwheelhouse/rbcl-0.1.0-cp35-abi3-linux_x86_64.whl -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
-          .venv/bin/python -c "True"
+          .venv/bin/python -c "import rbcl.bindings as lib; print(lib.crypto_core_ristretto255_is_valid_point(lib.crypto_core_ristretto255_random()))"
       - run: mkdir rbcl-wheelhouse
       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
       - uses: actions/upload-artifact@v1
@@ -75,7 +75,7 @@ jobs:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
       - run: venv/bin/pip install -f wheelhouse --no-index rbcl
       - run: |
-          venv/bin/python -c "True"
+          venv/bin/python -c "import rbcl.bindings as lib; print(lib.crypto_core_ristretto255_is_valid_point(lib.crypto_core_ristretto255_random()))"
 
       - run: mkdir rbcl-wheelhouse
       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
