@@ -30,7 +30,7 @@ jobs:
       - run: auditwheel repair tmpwheelhouse/bcl*.whl -w wheelhouse/
       - run: .venv/bin/pip install bcl --no-index -f wheelhouse/
       - run: |
-          .venv/bin/python -c "import bcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+          .venv/bin/python -c "import bcl; True"
       - run: mkdir bcl-wheelhouse
       - run: mv wheelhouse/bcl*.whl bcl-wheelhouse/
       - uses: actions/upload-artifact@v1
@@ -73,7 +73,7 @@ jobs:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
       - run: venv/bin/pip install -f wheelhouse --no-index bcl
       - run: |
-          venv/bin/python -c "import bcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+          venv/bin/python -c "import bcl; True"
       - run: mkdir bcl-wheelhouse
       - run: mv wheelhouse/bcl*.whl bcl-wheelhouse/
       - uses: actions/upload-artifact@v1
@@ -123,7 +123,7 @@ jobs:
         run: pip install -f wheelhouse bcl --no-index
       - name: Test the installed wheel
         run: |
-          python -c "import bcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+          python -c "import bcl; True"
       - run: mkdir bcl-wheelhouse
       - run: move wheelhouse\bcl*.whl bcl-wheelhouse\
       - uses: actions/upload-artifact@v1
