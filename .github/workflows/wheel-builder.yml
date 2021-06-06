@@ -107,7 +107,7 @@ jobs:
           echo "LIB=C:/libsodium/${{ matrix.WINDOWS.SODIUM_ARCH }}/release/${{ matrix.PYTHON.SODIUM_MSVC_VERSION }}/static;$LIB" >> $GITHUB_ENV
         shell: bash
       - name: Install wheel and our Python dependencies
-        run: python -m pip install -U pip wheel cffi
+        run: python -m pip install -U pip wheel cffi six
         shell: bash
       - name: Build the wheel
         run: |
