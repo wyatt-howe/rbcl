@@ -215,7 +215,7 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="rbcl",
-    version="0.1.0",
+    version="0.1.1",
     license="Apache",
     url="https://github.com/nthparty/rbcl",
     author="Wyatt Howe",

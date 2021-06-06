@@ -41,4 +41,4 @@ rbcl/libsodium/libsodium.pc
 rbcl/libsodium/libtool
 
 .DS_Store
-dist/temporary
+dist/
