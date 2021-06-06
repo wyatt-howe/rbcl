@@ -98,6 +98,7 @@ Manual installation
     # Build as a wheel and install
     python setup.py bdist_wheel
     python -m pip install -f wheelhouse --no-index rbcl
+    python -m nose
 
 ===================================
 Publishing [for Nth Party]
