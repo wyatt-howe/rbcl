@@ -106,7 +106,7 @@ jobs:
         shell: bash
       - name: Extract libsodium libraries
         run: |
-          Expand-Archive rbcl/src/libsodium-1.0.18-msvc.zip -DestinationPath c:\
+          Expand-Archive rbcl/libsodium/dist-build/libsodium-1.0.18-msvc.zip -DestinationPath c:\
         shell: powershell
       - name: Add sodium to paths
         run: |
