@@ -8,9 +8,9 @@ primitives.
 from __future__ import annotations
 import doctest
 import base64
-import lib.bcl.utils
-import lib.bcl.secret
-import lib.bcl.public
+import bcl.bcl.utils
+import bcl.bcl.secret
+import bcl.bcl.public
 
 class raw(bytes):
     """
@@ -55,7 +55,7 @@ class symmetric:
     """
     Symmetric (i.e., secret-key) encryption/decryption primitives.
 
-    >>> x = plain(lib.bcl.utils.random(1024))
+    >>> x = plain(bcl.bcl.utils.random(1024))
     >>> isinstance(x, raw)
     True
     >>> isinstance(x, plain)
@@ -84,27 +84,27 @@ class symmetric:
         """
         Create a secret key.
         """
-        return secret(lib.bcl.utils.random())
+        return secret(bcl.bcl.utils.random())
 
     @staticmethod
     def encrypt(secret_key: secret, plaintext: plain) -> cipher:
         """
         Encrypt a plaintext (a bytes-like object) using the supplied secret key.
         """
-        return cipher(lib.bcl.secret.SecretBox(secret_key).encrypt(plaintext))
+        return cipher(bcl.bcl.secret.SecretBox(secret_key).encrypt(plaintext))
 
     @staticmethod
     def decrypt(secret_key: secret, ciphertext: cipher) -> plain:
         """
         Decrypt a ciphertext (a bytes-like object) using the supplied secret key.
         """
-        return plain(lib.bcl.secret.SecretBox(secret_key).decrypt(ciphertext))
+        return plain(bcl.bcl.secret.SecretBox(secret_key).decrypt(ciphertext))
 
 class asymmetric:
     """
     Asymmetric (i.e., public-key) encryption/decryption primitives.
 
-    >>> x = plain(lib.bcl.utils.random(1024))
+    >>> x = plain(bcl.bcl.utils.random(1024))
     >>> x == plain.from_base64(x.to_base64())
     True
     >>> s = asymmetric.secret()
@@ -124,14 +124,14 @@ class asymmetric:
         """
         Create a secret key.
         """
-        return secret(lib.bcl.utils.random())
+        return secret(bcl.bcl.utils.random())
 
     @staticmethod
     def public(secret_key: secret) -> public:
         """
         Create a public key using a secret key (a bytes-like object of length 32).
         """
-        return public(lib.bcl.public.PrivateKey(secret_key).public_key)
+        return public(bcl.bcl.public.PrivateKey(secret_key).public_key)
 
     @staticmethod
     def encrypt(public_key: public, plaintext: plain) -> cipher:
@@ -139,8 +139,8 @@ class asymmetric:
         Encrypt a plaintext (a bytes-like object) using the supplied public key.
         """
         return cipher(
-            lib.bcl.public\
-                .SealedBox(lib.bcl.public.PublicKey(public_key)).encrypt(plaintext)
+            bcl.bcl.public\
+                .SealedBox(bcl.bcl.public.PublicKey(public_key)).encrypt(plaintext)
         )
 
     @staticmethod
@@ -149,8 +149,8 @@ class asymmetric:
         Decrypt a ciphertext (a bytes-like object) using the supplied secret key.
         """
         return plain(
-            lib.bcl.public\
-                .SealedBox(lib.bcl.public.PrivateKey(secret_key)).decrypt(ciphertext)
+            bcl.bcl.public\
+                .SealedBox(bcl.bcl.public.PrivateKey(secret_key)).decrypt(ciphertext)
         )
 
 if __name__ == "__main__":

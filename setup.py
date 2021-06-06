@@ -59,10 +59,10 @@ def abshere(*paths):
     return os.path.abspath(here(*paths))
 
 
-sodium = functools.partial(here, "bcl/lib/libsodium/bcl/lib/libsodium")
+sodium = functools.partial(here, "bcl/libsodium/bcl/libsodium")
 
 
-sys.path.insert(0, abshere("bcl/lib"))
+sys.path.insert(0, abshere("bcl"))
 
 
 def which(name, flags=os.X_OK):  # Taken from twisted
@@ -100,12 +100,12 @@ class Distribution(Distribution):
 
 class build_clib(_build_clib):
     def get_source_files(self):
-        files = glob.glob(here("bcl/lib/libsodium/*"))
-        files += glob.glob(here("bcl/lib/libsodium/*/*"))
-        files += glob.glob(here("bcl/lib/libsodium/*/*/*"))
-        files += glob.glob(here("bcl/lib/libsodium/*/*/*/*"))
-        files += glob.glob(here("bcl/lib/libsodium/*/*/*/*/*"))
-        files += glob.glob(here("bcl/lib/libsodium/*/*/*/*/*/*"))
+        files = glob.glob(here("bcl/libsodium/*"))
+        files += glob.glob(here("bcl/libsodium/*/*"))
+        files += glob.glob(here("bcl/libsodium/*/*/*"))
+        files += glob.glob(here("bcl/libsodium/*/*/*/*"))
+        files += glob.glob(here("bcl/libsodium/*/*/*/*/*"))
+        files += glob.glob(here("bcl/libsodium/*/*/*/*/*/*"))
 
         return files
 
@@ -141,14 +141,14 @@ class build_clib(_build_clib):
 
         # Ensure all of our executable files have their permission set
         for filename in [
-            "bcl/lib/libsodium/autogen.sh",
-            "bcl/lib/libsodium/compile",
-            "bcl/lib/libsodium/configure",
-            "bcl/lib/libsodium/depcomp",
-            "bcl/lib/libsodium/install-sh",
-            "bcl/lib/libsodium/missing",
-            "bcl/lib/libsodium/msvc-scripts/process.bat",
-            "bcl/lib/libsodium/test/default/wintest.bat",
+            "bcl/libsodium/autogen.sh",
+            "bcl/libsodium/compile",
+            "bcl/libsodium/configure",
+            "bcl/libsodium/depcomp",
+            "bcl/libsodium/install-sh",
+            "bcl/libsodium/missing",
+            "bcl/libsodium/msvc-scripts/process.bat",
+            "bcl/libsodium/test/default/wintest.bat",
         ]:
             os.chmod(here(filename), 0o755)
 
@@ -156,7 +156,7 @@ class build_clib(_build_clib):
             raise Exception("ERROR: The 'make' utility is missing from PATH")
 
         # Locate our configure script
-        configure = abshere("bcl/lib/libsodium/configure")
+        configure = abshere("bcl/libsodium/configure")
 
         # Run ./configure
         configure_flags = [
@@ -227,10 +227,10 @@ setup(
     tests_require=["nose"],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
     package_dir={"": "bcl"},
-    packages=["lib.bcl", "lib.bindings"],
+    packages=["bcl", "bcl.bindings"],
     ext_package="bcl",
     cffi_modules=[
-        "bcl/lib/bindings/build.py:ffi",
+        "bcl/bindings/build.py:ffi",
     ],
     cmdclass={
         "build_clib": build_clib,
