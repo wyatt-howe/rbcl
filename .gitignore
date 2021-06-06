@@ -34,11 +34,11 @@ pip-log.txt
 nacl/_cffi_*.c
 
 # Generate libsodium files
-rbcl/libsodium/**/Makefile
-rbcl/libsodium/config.log
-rbcl/libsodium/config.status
-rbcl/libsodium/libsodium.pc
-rbcl/libsodium/libtool
+bcl/libsodium/**/Makefile
+bcl/libsodium/config.log
+bcl/libsodium/config.status
+bcl/libsodium/libsodium.pc
+bcl/libsodium/libtool
 
 .DS_Store
 dist/

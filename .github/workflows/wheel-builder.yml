@@ -18,25 +18,25 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
         run: .venv/bin/pip install -U pip cffi six
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
+      - run: curl -L https://github.com/nthparty/bcl/archive/refs/heads/master.zip --output bcl-${{ github.event.inputs.version }}.zip && unzip bcl*.zip && mkdir tmpwheelhouse
 
       - run: |
           REGEX="cp3([0-9])*"
           if [[ "${{ matrix.PYTHON }}" =~ $REGEX ]]; then
               PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
           fi
-          cd rbcl-master
-          LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
-      - run: auditwheel repair tmpwheelhouse/rbcl*.whl -w wheelhouse/
-      - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
+          cd bcl-master
+          LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/bcl*.whl ../tmpwheelhouse
+      - run: auditwheel repair tmpwheelhouse/bcl*.whl -w wheelhouse/
+      - run: .venv/bin/pip install bcl --no-index -f wheelhouse/
       - run: |
-          .venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
-      - run: mkdir rbcl-wheelhouse
-      - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
+          .venv/bin/python -c "import bcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+      - run: mkdir bcl-wheelhouse
+      - run: mv wheelhouse/bcl*.whl bcl-wheelhouse/
       - uses: actions/upload-artifact@v1
         with:
-          name: "rbcl-${{ github.event.inputs.version }}-manylinux1-${{ matrix.PYTHON }}"
-          path: rbcl-wheelhouse/
+          name: "bcl-${{ github.event.inputs.version }}-manylinux1-${{ matrix.PYTHON }}"
+          path: bcl-wheelhouse/
   macos:
     runs-on: macos-latest
     strategy:
@@ -57,29 +57,29 @@ jobs:
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - run: venv/bin/pip install -U pip wheel cffi six
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
+      - run: curl -L https://github.com/nthparty/bcl/archive/refs/heads/master.zip --output bcl-${{ github.event.inputs.version }}.zip && unzip bcl*.zip && mkdir wheelhouse
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
             if [[ "$PYTHON_VERSION" =~ $REGEX ]]; then
                 PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
             fi
-            cd rbcl-master
+            cd bcl-master
             rm -f dist/*.*
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
-                ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
+                ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/bcl*.whl ../wheelhouse
             cd ..
         env:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
-      - run: venv/bin/pip install -f wheelhouse --no-index rbcl
+      - run: venv/bin/pip install -f wheelhouse --no-index bcl
       - run: |
-          venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
-      - run: mkdir rbcl-wheelhouse
-      - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
+          venv/bin/python -c "import bcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+      - run: mkdir bcl-wheelhouse
+      - run: mv wheelhouse/bcl*.whl bcl-wheelhouse/
       - uses: actions/upload-artifact@v1
         with:
-          name: "rbcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
-          path: rbcl-wheelhouse/
+          name: "bcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
+          path: bcl-wheelhouse/
   windows:
     runs-on: windows-latest
     strategy:
@@ -99,7 +99,7 @@ jobs:
           architecture: ${{ matrix.WINDOWS.ARCH }}
       - name: Extract libsodium libraries
         run: |
-          Expand-Archive rbcl/libsodium/dist-build/libsodium-1.0.18-msvc.zip -DestinationPath c:\
+          Expand-Archive bcl/libsodium/dist-build/libsodium-1.0.18-msvc.zip -DestinationPath c:\
         shell: powershell
       - name: Add sodium to paths
         run: |
@@ -113,20 +113,20 @@ jobs:
         run: |
           mkdir wheelhouse
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" -no_logo -arch=${{ matrix.WINDOWS.VS_ARCH }}
-          python setup.py bdist_wheel --py-limited-api=${{ matrix.PYTHON.ABI_VERSION }} && mv dist/rbcl*.whl wheelhouse
+          python setup.py bdist_wheel --py-limited-api=${{ matrix.PYTHON.ABI_VERSION }} && mv dist/bcl*.whl wheelhouse
         shell: cmd
         env:
           PYNACL_SODIUM_LIBRARY_NAME: sodium
           PYNACL_SODIUM_STATIC: 1
           SODIUM_INSTALL: system
       - name: Test installing the wheel
-        run: pip install -f wheelhouse rbcl --no-index
+        run: pip install -f wheelhouse bcl --no-index
       - name: Test the installed wheel
         run: |
-          python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
-      - run: mkdir rbcl-wheelhouse
-      - run: move wheelhouse\rbcl*.whl rbcl-wheelhouse\
+          python -c "import bcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+      - run: mkdir bcl-wheelhouse
+      - run: move wheelhouse\bcl*.whl bcl-wheelhouse\
       - uses: actions/upload-artifact@v1
         with:
-          name: "rbcl-${{ github.event.inputs.version }}-win-${{ matrix.WINDOWS.ARCH }}-${{ matrix.PYTHON.VERSION }}"
-          path: rbcl-wheelhouse\
+          name: "bcl-${{ github.event.inputs.version }}-win-${{ matrix.WINDOWS.ARCH }}-${{ matrix.PYTHON.VERSION }}"
+          path: bcl-wheelhouse\

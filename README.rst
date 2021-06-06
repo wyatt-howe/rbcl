@@ -1,15 +1,15 @@
 ====
-RbCl
+BCl
 ====
 
 Ristretto group Python binding to
 `libsodium <https://github.com/jedisct1/libsodium>`__
 
-RbCl supports Python 2.7 and 3.5+ as well as PyPy 2.6+.
+BCl supports Python 2.7 and 3.5+ as well as PyPy 2.6+.
 
 .. code:: python
 
-    import rbcl.bindings as lib
+    import bcl.bindings as lib
 
     x = lib.crypto_core_ristretto255_random()
     assert lib.crypto_core_ristretto255_is_valid_point(x)
@@ -97,7 +97,7 @@ Manual installation
 
     # Build as a wheel and install
     python setup.py bdist_wheel
-    python -m pip install -f wheelhouse --no-index rbcl
+    python -m pip install -f wheelhouse --no-index bcl
     python -m nose
 
 ===================================
@@ -111,4 +111,4 @@ Publishing [for Nth Party]
     
     # Run wheel-builder.yml and save/download artifacts locally, e.g. in ./dist
     # Then, upload to PyPi
-    twine upload dist/rbcl-0.1.1*
+    twine upload dist/bcl-0.1.1*
