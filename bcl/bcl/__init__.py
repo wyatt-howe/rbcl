@@ -28,25 +28,25 @@ __all__ = [
     "__copyright__",
 ]
 
-__title__ = "PyNaCl"
+__title__ = "BCl"
 __summary__ = (
     "Python binding to the Networking and Cryptography (NaCl) " "library"
 )
 __uri__ = "https://github.com/pyca/pynacl/"
 
-__version__ = "1.5.0.dev1"
+__version__ = "0.2.0"
 
-__author__ = "The PyNaCl developers"
-__email__ = "cryptography-dev@python.org"
+__author__ = ""
+__email__ = ""
 
-__license__ = "Apache License 2.0"
-__copyright__ = "Copyright 2013-2018 {0}".format(__author__)
+__license__ = "MIT License"
+__copyright__ = "Copyright"
 
 
 if sys.version_info[0] == 2:
     warnings.warn(
         "Python 2 is no longer supported by the Python core team. Support for "
-        "it is now deprecated in PyNaCl, and will be removed in the "
+        "it is now deprecated in BCl, and will be removed in the "
         "next release.",
         DeprecationWarning,
         stacklevel=2,

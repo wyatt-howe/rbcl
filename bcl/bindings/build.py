@@ -47,6 +47,8 @@ if os.getenv("PYNACL_SODIUM_STATIC") is not None:
 source.append("#include <sodium.h>")
 source.append("static const int PYNACL_HAS_CRYPTO_CORE_RISTRETTO255 = 1;")
 source.append("static const int PYNACL_HAS_CRYPTO_SCALARMULT_RISTRETTO255 = 1;")
+source.append("static const int PYNACL_HAS_CRYPTO_CORE_ED25519 = 1;")
+source.append("static const int PYNACL_HAS_CRYPTO_SCALARMULT_ED25519 = 1;")
 
 if sys.platform == "win32":
     libraries = ["libsodium"]

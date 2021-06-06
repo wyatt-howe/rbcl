@@ -43,7 +43,7 @@ docs_requirements = ["sphinx>=1.6.5", "sphinx_rtd_theme"]
 if platform.python_implementation() == "PyPy":
     if sys.pypy_version_info < (2, 6):
         raise RuntimeError(
-            "PyNaCl is not compatible with PyPy < 2.6. Please "
+            "BCl is not compatible with PyPy < 2.6. Please "
             "upgrade PyPy to use this library."
         )
 else:
