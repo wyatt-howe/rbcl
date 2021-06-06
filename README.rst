@@ -97,4 +97,17 @@ Manual installation
 
     # Build as a wheel and install
     python setup.py bdist_wheel
-    python -m pip install --force-reinstall dist/rbcl-*.whl
+    python -m pip install -f wheelhouse --no-index rbcl
+
+===================================
+Publishing [for Nth Party]
+===================================
+
+.. code:: shell
+    
+    # Package source distribution
+    python setup.py sdist
+    
+    # Run wheel-builder.yml and save/download artifacts locally, e.g. in ./dist
+    # Then, upload to PyPi
+    twine upload dist/rbcl-0.1.1*
