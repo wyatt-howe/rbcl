@@ -226,11 +226,11 @@ setup(
     test_suite="nose.collector",
     tests_require=["nose"],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
-    package_dir={"": "."},
-    packages=["bcl", "bcl.bindings", "bcl.headers"],
+    package_dir={"": "bcl"},
+    packages=["bcl", "bcl.bindings"],
     ext_package="bcl",
     cffi_modules=[
-        "bcl/headers/build.py:ffi",
+        "bcl/bindings/build.py:ffi",
     ],
     cmdclass={
         "build_clib": build_clib,
