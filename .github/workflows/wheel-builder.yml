@@ -14,7 +14,6 @@ jobs:
         PYTHON: [ "cp35-cp35m", "cp27-cp27m", "cp27-cp27mu", "cp35-cp35m", "cp36-cp36m", "cp37-cp37m", "cp38-cp38", "cp39-cp39" ]
     name: "Python ${{ matrix.PYTHON }} for manylinux1"
     steps:
-      - run: ls /opt/python/
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m pip install virtualenv
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
@@ -27,10 +26,9 @@ jobs:
               PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
           fi
           cd rbcl-master
-          rm -f dist/*.*
           LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
-      - run: ls ..; ls .; ls tmpwheelhouse; auditwheel repair tmpwheelhouse/rbcl*.whl -w wheelhouse/
-      - run: ls wheelhouse; .venv/bin/pip install rbcl --no-index -f wheelhouse/
+      - run: auditwheel repair tmpwheelhouse/rbcl*.whl -w wheelhouse/
+      - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
       - run: |
           .venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
       - run: mkdir rbcl-wheelhouse
@@ -99,9 +97,6 @@ jobs:
         with:
           python-version: ${{ matrix.PYTHON.VERSION }}
           architecture: ${{ matrix.WINDOWS.ARCH }}
-      - name: Info
-        run: ls -R .
-        shell: bash
       - name: Extract libsodium libraries
         run: |
           Expand-Archive rbcl/libsodium/dist-build/libsodium-1.0.18-msvc.zip -DestinationPath c:\
