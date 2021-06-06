@@ -59,7 +59,7 @@ def abshere(*paths):
     return os.path.abspath(here(*paths))
 
 
-sodium = functools.partial(here, "bcl/libsodium/bcl/libsodium")
+sodium = functools.partial(here, "bcl/libsodium/")
 
 
 sys.path.insert(0, abshere("bcl"))
@@ -226,7 +226,7 @@ setup(
     test_suite="nose.collector",
     tests_require=["nose"],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
-    package_dir={"": "bcl"},
+    package_dir={"": ""},
     packages=["bcl", "bcl.bindings"],
     ext_package="bcl",
     cffi_modules=[
