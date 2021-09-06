@@ -102,6 +102,8 @@ class build_clib(_build_clib):
     def get_source_files(self):
         files = glob.glob(here("rbcl/libsodium/*"))
         files += glob.glob(here("rbcl/libsodium/*/*"))
+        files += glob.glob(here("rbcl/*"))
+        files += glob.glob(here("rbcl/bindings/*"))
         files += glob.glob(here("rbcl/libsodium/*/*/*"))
         files += glob.glob(here("rbcl/libsodium/*/*/*/*"))
         files += glob.glob(here("rbcl/libsodium/*/*/*/*/*"))
