@@ -67,7 +67,7 @@ sys.path.insert(0, abshere("rbcl"))
 
 def which(name, flags=os.X_OK):  # Taken from twisted
     result = []
-    exts = filter(None, os.environ.get("PATHEXT", "").split(os.pathsep))
+    exts = list(filter(None, os.environ.get("PATHEXT", "").split(os.pathsep)))
     path = os.environ.get("PATH", None)
     if path is None:
         return []
