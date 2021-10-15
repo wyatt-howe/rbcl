@@ -17,12 +17,19 @@ jobs:
       - run: yum -y install libffi-devel
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m pip install virtualenv
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
-      - name: Install python dependencies
+      - name: Install the Python dependencies
         run: .venv/bin/pip install -U pip setuptools wheel
       - run: .venv/bin/pip install -U pip cffi six
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
-
-      - run: |
+      - name: Get the latest rbcl source from GitHub
+        run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
+      - name: Get the libsodium v1.0.18 source from GitHub
+        run: |
+          curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output rbcl/libsodium.tar.gz
+          tar -xvzf rbcl/libsodium.tar.gz
+          mv libsodium-1.0.18 rbcl/libsodium
+          rm rbcl/libsodium.tar.gz
+      - name: Build the wheel
+        run: |
           REGEX="cp3([0-9])*"
           if [[ "${{ matrix.PYTHON }}" =~ $REGEX ]]; then
               PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
@@ -56,7 +63,7 @@ jobs:
           clang --version
           clang --print-supported-cpus
           uname -a
-      - name: Get the latest rbcl source from GitHub
+      - name: Set up the Python environment
         run: |
           curl "$PYTHON_DOWNLOAD_URL" -o python.pkg
           sudo installer -pkg python.pkg -target /
@@ -65,7 +72,14 @@ jobs:
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - run: venv/bin/pip install -U pip wheel cffi six
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
+      - name: Get the latest rbcl source from GitHub
+        run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
+      - name: Get the libsodium v1.0.18 source from GitHub
+        run: |
+          curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output rbcl/libsodium.tar.gz
+          tar -xvzf rbcl/libsodium.tar.gz
+          mv libsodium-1.0.18 rbcl/libsodium
+          rm rbcl/libsodium.tar.gz
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
