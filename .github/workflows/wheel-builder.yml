@@ -28,10 +28,15 @@ jobs:
           cd rbcl-main
       - name: Get the libsodium v1.0.18 source from GitHub
         run: |
-          curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output rbcl/libsodium.tar.gz
-          tar -xvzf rbcl/libsodium.tar.gz
+          pwd
+          ls -R ../..
+          cd rbcl-main
+          ls .
+          pwd
+          curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output libsodium.tar.gz
+          tar -xvzf libsodium.tar.gz
           mv libsodium-1.0.18 rbcl/libsodium
-          rm rbcl/libsodium.tar.gz
+          rm libsodium.tar.gz
       - name: Build the wheel
         run: |
           REGEX="cp3([0-9])*"
@@ -83,10 +88,10 @@ jobs:
           cd rbcl-main
       - name: Get the libsodium v1.0.18 source from GitHub
         run: |
-          curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output rbcl/libsodium.tar.gz
-          tar -xvzf rbcl/libsodium.tar.gz
+          curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output libsodium.tar.gz
+          tar -xvzf libsodium.tar.gz
           mv libsodium-1.0.18 rbcl/libsodium
-          rm rbcl/libsodium.tar.gz
+          rm libsodium.tar.gz
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
