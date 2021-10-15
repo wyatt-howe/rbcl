@@ -184,13 +184,13 @@ class build_clib(_build_clib):
 
         make_args = os.environ.get("LIBSODIUM_MAKE_ARGS", "").split()
         # Build the library
-        subprocess.check_call(["make"] + make_args, cwd=build_temp)
+        subprocess.check_call(["make", "-target arm64-apple-macos11"] + make_args, cwd=build_temp)
 
         # Check the build library
-        subprocess.check_call(["make", "check"] + make_args, cwd=build_temp)
+        subprocess.check_call(["make", "check", "-target arm64-apple-macos11"] + make_args, cwd=build_temp)
 
         # Install the built library
-        subprocess.check_call(["make", "install"] + make_args, cwd=build_temp)
+        subprocess.check_call(["make", "install", "-target arm64-apple-macos11"] + make_args, cwd=build_temp)
 
 
 class build_ext(_build_ext):
