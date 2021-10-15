@@ -18,14 +18,14 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
         run: .venv/bin/pip install -U pip cffi six
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
+      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir tmpwheelhouse
 
       - run: |
           REGEX="cp3([0-9])*"
           if [[ "${{ matrix.PYTHON }}" =~ $REGEX ]]; then
               PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
           fi
-          cd rbcl-master
+          cd rbcl-main
           LIBSODIUM_MAKE_ARGS="-j$(nproc)" ../.venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../tmpwheelhouse
       - run: auditwheel repair tmpwheelhouse/rbcl*.whl -w wheelhouse/
       - run: .venv/bin/pip install rbcl --no-index -f wheelhouse/
@@ -48,7 +48,7 @@ jobs:
             BIN_PATH: '/Library/Frameworks/Python.framework/Versions/3.8/bin/python3'
     name: "Python ${{ matrix.PYTHON.VERSION }} for ABI ${{ matrix.PYTHON.ABI_VERSION }} on macOS"
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
       - run: |
           curl "$PYTHON_DOWNLOAD_URL" -o python.pkg
           sudo installer -pkg python.pkg -target /
@@ -57,14 +57,14 @@ jobs:
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - run: venv/bin/pip install -U pip wheel cffi six
-      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/master.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
+      - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
       - name: Build the wheel
         run: |
             REGEX="3\.([0-9])*"
             if [[ "$PYTHON_VERSION" =~ $REGEX ]]; then
                 PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
             fi
-            cd rbcl-master
+            cd rbcl-main
             rm -f dist/*.*
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
@@ -91,7 +91,7 @@ jobs:
           - {VERSION: "3.8", SODIUM_MSVC_VERSION: "v140", "USE_ABI3": "true", "ABI_VERSION": "cp35"}
     name: "${{ matrix.PYTHON.VERSION }} ${{ matrix.WINDOWS.ARCH }} ${{ matrix.PYTHON.ABI_VERSION }}"
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
       - name: Setup python
         uses: actions/setup-python@v2.2.2
         with:
