@@ -108,6 +108,7 @@ class build_clib(_build_clib):
         files += glob.glob(here("rbcl/libsodium/*/*/*/*"))
         files += glob.glob(here("rbcl/libsodium/*/*/*/*/*"))
         files += glob.glob(here("rbcl/libsodium/*/*/*/*/*/*"))
+        files += glob.glob(here("rbcl/libsodium/*/*/*/*/*/*/*"))
 
         return files
 
@@ -217,7 +218,7 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="rbcl",
-    version="0.1.4",
+    version="0.1.5",
     license="Apache",
     url="https://github.com/nthparty/rbcl",
     author="Wyatt Howe",
