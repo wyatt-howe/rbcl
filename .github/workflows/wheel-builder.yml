@@ -14,7 +14,7 @@ jobs:
         PYTHON: [ "cp35-cp35m", "cp27-cp27m", "cp27-cp27mu", "cp35-cp35m", "cp36-cp36m", "cp37-cp37m", "cp38-cp38", "cp39-cp39" ]
     name: "Python ${{ matrix.PYTHON }} for manylinux1"
     steps:
-      - run: yum install libffi6 libffi-devel
+      - run: yum -y install libffi-devel
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m pip install virtualenv
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install python dependencies
