@@ -156,7 +156,8 @@ jobs:
           architecture: ${{ matrix.WINDOWS.ARCH }}
       - name: Extract libsodium libraries
         run: |
-          Expand-Archive rbcl/libsodium/dist-build/libsodium-1.0.18-msvc.zip -DestinationPath c:\
+          Invoke-WebRequest -Uri https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18-msvc.zip -OutFile rbcl/libsodium-1.0.18-msvc.zip
+          Expand-Archive rbcl/libsodium-1.0.18-msvc.zip -DestinationPath c:\
         shell: powershell
       - name: Add sodium to paths
         run: |
