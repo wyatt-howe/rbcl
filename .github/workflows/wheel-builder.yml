@@ -100,7 +100,7 @@ jobs:
           clang --version
           uname -a
       - name: Get the latest rbcl source from GitHub
-      - run: |
+        run: |
           curl "$PYTHON_DOWNLOAD_URL" -o python.pkg
           sudo installer -pkg python.pkg -target /
         env:
