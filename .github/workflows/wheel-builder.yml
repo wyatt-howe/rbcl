@@ -50,6 +50,11 @@ jobs:
     name: "Python ${{ matrix.PYTHON.VERSION }} for ABI ${{ matrix.PYTHON.ABI_VERSION }} on macOS"
     steps:
       - uses: actions/checkout@main
+      - name: Status
+        run: |
+          clang --version
+          uname -a
+      - name: Get the latest rbcl source from GitHub
       - run: |
           curl "$PYTHON_DOWNLOAD_URL" -o python.pkg
           sudo installer -pkg python.pkg -target /
@@ -82,10 +87,10 @@ jobs:
           name: "rbcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
           path: rbcl-wheelhouse/
   macos-arm64:
-    runs-on: [self-hosted, macOS, ARM64]
+    runs-on: macos-latest
     defaults:
       run:
-        shell: "/usr/bin/arch -arch arm64e /bin/bash {0}"
+        shell: "/usr/bin/arch -arm64 bash --noprofile --norc -eo pipefail {0}"
     strategy:
       matrix:
         PYTHON:
