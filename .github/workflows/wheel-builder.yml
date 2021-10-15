@@ -39,7 +39,7 @@ jobs:
         with:
           name: "rbcl-${{ github.event.inputs.version }}-manylinux1-${{ matrix.PYTHON }}"
           path: rbcl-wheelhouse/
-  macos:
+  macos-intel:
     runs-on: macos-latest
     strategy:
       matrix:
@@ -48,7 +48,7 @@ jobs:
             ABI_VERSION: '3.5'
             DOWNLOAD_URL: 'https://www.python.org/ftp/python/3.8.2/python-3.8.2-macosx10.9.pkg'
             BIN_PATH: '/Library/Frameworks/Python.framework/Versions/3.8/bin/python3'
-    name: "Python ${{ matrix.PYTHON.VERSION }} for ABI ${{ matrix.PYTHON.ABI_VERSION }} on macOS"
+    name: "Python ${{ matrix.PYTHON.VERSION }} for ABI ${{ matrix.PYTHON.ABI_VERSION }} on macOS (Intel Core)"
     steps:
       - uses: actions/checkout@main
       - name: Status
@@ -88,6 +88,55 @@ jobs:
         with:
           name: "rbcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
           path: rbcl-wheelhouse/
+#   macos-arm64:
+#     runs-on: macos-latest
+#     strategy:
+#       matrix:
+#         PYTHON:
+#           - VERSION: '3.8'
+#             ABI_VERSION: '3.5'
+#             DOWNLOAD_URL: 'https://www.python.org/ftp/python/3.8.2/python-3.8.2-macosx10.9.pkg'
+#             BIN_PATH: '/Library/Frameworks/Python.framework/Versions/3.8/bin/python3'
+#     name: "Python ${{ matrix.PYTHON.VERSION }} for ABI ${{ matrix.PYTHON.ABI_VERSION }} on macOS (ARM64)"
+#     steps:
+#       - uses: actions/checkout@main
+#       - name: Status
+#         run: |
+#           clang --version
+#           clang --print-supported-cpus
+#           uname -a
+#       - name: Get the latest rbcl source from GitHub
+#         run: |
+#           curl "$PYTHON_DOWNLOAD_URL" -o python.pkg
+#           sudo installer -pkg python.pkg -target /
+#         env:
+#           PYTHON_DOWNLOAD_URL: ${{ matrix.PYTHON.DOWNLOAD_URL }}
+#       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
+#       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
+#       - run: venv/bin/pip install -U pip wheel cffi six
+#       - run: curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip && unzip rbcl*.zip && mkdir wheelhouse
+#       - name: Build the wheel
+#         run: |
+#             REGEX="3\.([0-9])*"
+#             if [[ "$PYTHON_VERSION" =~ $REGEX ]]; then
+#                 PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
+#             fi
+#             cd rbcl-main
+#             rm -f dist/*.*
+#             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -target arm64-apple-macos11" \
+#                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
+#             cd ..
+#         env:
+#           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
+#       - run: venv/bin/pip install -f wheelhouse --no-index rbcl
+#       - run: |
+#           venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
+#       - run: mkdir rbcl-wheelhouse
+#       - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
+#       - uses: actions/upload-artifact@v1
+#         with:
+#           name: "rbcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
+#           path: rbcl-wheelhouse/
   windows:
     runs-on: windows-latest
     strategy:
