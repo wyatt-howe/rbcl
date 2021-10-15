@@ -42,6 +42,13 @@ jobs:
           tar -xvzf libsodium.tar.gz
           mv libsodium-1.0.18 rbcl/libsodium
           rm libsodium.tar.gz
+          echo "5555"
+          ls .
+          echo "6666"
+          ls ./rbcl
+          echo "7777"
+          find . -name ".venv"
+          echo "8888"
       - name: Build the wheel
         run: |
           REGEX="cp3([0-9])*"
