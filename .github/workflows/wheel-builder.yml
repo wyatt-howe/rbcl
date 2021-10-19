@@ -97,7 +97,7 @@ jobs:
         run: |
           curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip
           unzip rbcl*.zip
-          mkdir tmpwheelhouse
+          mkdir wheelhouse
       - name: Get the libsodium v1.0.18 source from GitHub
         run: |
           cd rbcl-main
@@ -118,6 +118,8 @@ jobs:
             pwd
             ls -hal dist
             cp dist/rbcl*.whl ../wheelhouse
+            cp dist/* ../wheelhouse
+            cp -R dist ../wheelhouse/
             pwd
             ls -hal ../wheelhouse
             cd ..
