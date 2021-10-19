@@ -107,15 +107,15 @@ jobs:
           rm libsodium.tar.gz
       - name: Build the wheel
         run: |
-            cd rbcl-main
-            ls
             REGEX="3\.([0-9])*"
             if [[ "$PYTHON_VERSION" =~ $REGEX ]]; then
                 PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
             fi
+            cd rbcl-main
             rm -f dist/*.*
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
+            cd ..
         env:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
       - run: |
@@ -124,14 +124,7 @@ jobs:
           echo;echo;echo;
           ls
           echo;echo;echo;
-          ls wheelhouse
-          echo;echo;echo;
-          ls wheelhouse/wheelhouse
-          echo;echo;echo;
-          pwd
-          echo;echo;echo;
-          ls .
-          cp wheelhouse/wheelhouse/* wheelhouse
+          ls -R wheelhouse
           echo;echo;echo;
           venv/bin/pip install -f wheelhouse --no-index rbcl
       - run: |
