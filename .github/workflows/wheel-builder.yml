@@ -115,9 +115,11 @@ jobs:
             #rm -f dist/*.*
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API
-            ls dist
+            pwd
+            ls -hal dist
             cp dist/rbcl*.whl ../wheelhouse
-            ls ../wheelhouse
+            pwd
+            ls -hal ../wheelhouse
             cd ..
         env:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
