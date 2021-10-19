@@ -117,11 +117,21 @@ jobs:
                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API && mv dist/rbcl*.whl ../wheelhouse
         env:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
-      - run: venv/bin/pip install -f wheelhouse --no-index rbcl
+      - run: |
+          echo;echo;echo;
+          ls ..
+          echo;echo;echo;
+          ls
+          echo;echo;echo;
+          ls wheelhouse
+          echo;echo;echo;
+          pwd
+          echo;echo;echo;
+          venv/bin/pip install -f ../wheelhouse --no-index rbcl
       - run: |
           venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
       - run: mkdir rbcl-wheelhouse
-      - run: mv wheelhouse/rbcl*.whl rbcl-wheelhouse/
+      - run: mv ../wheelhouse/rbcl*.whl rbcl-wheelhouse/
       - uses: actions/upload-artifact@v1
         with:
           name: "rbcl-${{ github.event.inputs.version }}-macOS-${{ matrix.PYTHON.VERSION }}"
