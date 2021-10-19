@@ -120,12 +120,13 @@ jobs:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
       - run: |
           echo;echo;echo;
-          ls ..
+          echo;echo "begin;echo;
           echo;echo;echo;
-          ls
+          ls -R ..
           echo;echo;echo;
-          ls -R wheelhouse
+          echo;echo "end";echo;
           echo;echo;echo;
+          cd ..
           venv/bin/pip install -f wheelhouse --no-index rbcl
       - run: |
           venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
