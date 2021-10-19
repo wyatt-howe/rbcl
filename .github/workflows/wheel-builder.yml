@@ -18,7 +18,7 @@ jobs:
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m pip install virtualenv
       - run: /opt/python/${{ matrix.PYTHON }}/bin/python -m virtualenv .venv
       - name: Install the Python build dependencies
-        run: .venv/bin/pip install -U pip setuptools wheel
+        run: .venv/bin/pip install -U pip setuptools wheel cffi six
       - name: Get the latest rbcl source from GitHub
         run: |
           curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip
@@ -90,6 +90,7 @@ jobs:
           sudo installer -pkg python.pkg -target /
         env:
           PYTHON_DOWNLOAD_URL: ${{ matrix.PYTHON.DOWNLOAD_URL }}
+      - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install cffi six
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
       - name: Get the latest rbcl source from GitHub
@@ -125,9 +126,15 @@ jobs:
           echo;echo;echo;
           ls wheelhouse
           echo;echo;echo;
+          ls wheelhouse/wheelhouse
+          echo;echo;echo;
           pwd
           echo;echo;echo;
-          venv/bin/pip install -f ../wheelhouse --no-index rbcl
+          cd wheelhouse
+          pwd
+          ls .
+          echo;echo;echo;
+          venv/bin/pip install -f wheelhouse --no-index rbcl
       - run: |
           venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
       - run: mkdir rbcl-wheelhouse
@@ -211,8 +218,8 @@ jobs:
           echo "INCLUDE=C:/libsodium/include;$INCLUDE" >> $GITHUB_ENV
           echo "LIB=C:/libsodium/${{ matrix.WINDOWS.SODIUM_ARCH }}/release/${{ matrix.PYTHON.SODIUM_MSVC_VERSION }}/static;$LIB" >> $GITHUB_ENV
         shell: bash
-      - name: Install `wheel` dependency
-        run: python -m pip install -U pip wheel
+      - name: Install the `wheel` dependency
+        run: python -m pip install -U pip wheel cffi six
         shell: bash
       - name: Build the wheel
         run: |
