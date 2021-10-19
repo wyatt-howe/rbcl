@@ -120,7 +120,7 @@ jobs:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
       - run: |
           echo;echo;echo;
-          echo;echo "begin;echo;
+          echo;echo "begin";echo;
           echo;echo;echo;
           ls -R ..
           echo;echo;echo;
