@@ -97,9 +97,9 @@ jobs:
           curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip
           unzip rbcl*.zip
           mkdir tmpwheelhouse
-          cd rbcl-main
       - name: Get the libsodium v1.0.18 source from GitHub
         run: |
+          cd rbcl-main
           curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output libsodium.tar.gz
           tar -xvzf libsodium.tar.gz
           mv libsodium-1.0.18 rbcl/libsodium
