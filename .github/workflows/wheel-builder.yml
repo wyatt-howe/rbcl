@@ -49,8 +49,10 @@ jobs:
           echo "7777"
           find . -name ".venv"
           echo "8888"
+          cd ..
       - name: Build the wheel
         run: |
+          cd rbcl-main
           REGEX="cp3([0-9])*"
           if [[ "${{ matrix.PYTHON }}" =~ $REGEX ]]; then
               PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
@@ -104,8 +106,10 @@ jobs:
           tar -xvzf libsodium.tar.gz
           mv libsodium-1.0.18 rbcl/libsodium
           rm libsodium.tar.gz
+          cd ..
       - name: Build the wheel
         run: |
+            cd rbcl-main
             REGEX="3\.([0-9])*"
             if [[ "$PYTHON_VERSION" =~ $REGEX ]]; then
                 PY_LIMITED_API="--py-limited-api=cp3${BASH_REMATCH[1]}"
