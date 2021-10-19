@@ -27,27 +27,11 @@ jobs:
           cd rbcl-main
       - name: Get the libsodium v1.0.18 source from GitHub
         run: |
-          echo "000000000000000000"
-          pwd
-          echo "111111111111111111"
-          ls .
-          echo "222222222222222222"
           cd rbcl-main
-          ls .
-          echo "333333333333333333"
-          pwd
-          echo "444444444444444444"
           curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output libsodium.tar.gz
           tar -xvzf libsodium.tar.gz
           mv libsodium-1.0.18 rbcl/libsodium
           rm libsodium.tar.gz
-          echo "5555"
-          ls .
-          echo "6666"
-          ls ./rbcl
-          echo "7777"
-          find . -name ".venv"
-          echo "8888"
           cd ..
       - name: Build the wheel
         run: |
@@ -72,10 +56,18 @@ jobs:
     strategy:
       matrix:
         PYTHON:
+          - VERSION: '3.7'
+            ABI_VERSION: '3.5'
+            DOWNLOAD_URL: 'https://www.python.org/ftp/python/3.7.9/python-3.7.9-macosx10.9.pkg'
+            BIN_PATH: '/Library/Frameworks/Python.framework/Versions/3.7/bin/python3'
           - VERSION: '3.8'
             ABI_VERSION: '3.5'
             DOWNLOAD_URL: 'https://www.python.org/ftp/python/3.8.2/python-3.8.2-macosx10.9.pkg'
             BIN_PATH: '/Library/Frameworks/Python.framework/Versions/3.8/bin/python3'
+          - VERSION: '3.9'
+            ABI_VERSION: '3.5'
+            DOWNLOAD_URL: 'https://www.python.org/ftp/python/3.9.2/python-3.9.2-macosx10.9.pkg'
+            BIN_PATH: '/Library/Frameworks/Python.framework/Versions/3.9/bin/python3'
     name: "Python ${{ matrix.PYTHON.VERSION }} for ABI ${{ matrix.PYTHON.ABI_VERSION }} on macOS (Intel Core)"
     steps:
       - uses: actions/checkout@main
@@ -90,9 +82,9 @@ jobs:
           sudo installer -pkg python.pkg -target /
         env:
           PYTHON_DOWNLOAD_URL: ${{ matrix.PYTHON.DOWNLOAD_URL }}
-      - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install cffi six
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m pip install -U virtualenv
       - run: ${{ matrix.PYTHON.BIN_PATH }} -m virtualenv venv
+      - run: venv/bin/pip install -U pip wheel cffi six
       - name: Get the latest rbcl source from GitHub
         run: |
           curl -L https://github.com/nthparty/rbcl/archive/refs/heads/main.zip --output rbcl-${{ github.event.inputs.version }}.zip
@@ -115,26 +107,9 @@ jobs:
             #rm -f dist/*.*
             LIBSODIUM_MAKE_ARGS="-j$(sysctl -n hw.ncpu)" CFLAGS="-mmacosx-version-min=10.9 -march=core2" \
                 ../venv/bin/python setup.py bdist_wheel $PY_LIMITED_API
-            pwd
-            ls -hal dist
-            cp dist/rbcl*.whl ../wheelhouse
-            cp dist/* ../wheelhouse
-            cp -R dist ../wheelhouse/
-            pwd
-            ls -hal ../wheelhouse
-            cd ..
         env:
           PYTHON_VERSION: ${{ matrix.PYTHON.ABI_VERSION }}
-      - run: |
-          echo;echo;echo;
-          echo;echo "begin";echo;
-          echo;echo;echo;
-          #ls -R ..
-          echo;echo;echo;
-          echo;echo "end";echo;
-          echo;echo;echo;
-          #cd ..
-          venv/bin/pip install -f wheelhouse --no-index rbcl
+      - run: venv/bin/pip install -f wheelhouse --no-index rbcl
       - run: |
           venv/bin/python -c "import rbcl.bindings as lib; x = lib.crypto_core_ristretto255_random(); y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64); assert lib.crypto_core_ristretto255_add(x, y) == lib.crypto_core_ristretto255_add(y, x)"
       - run: mkdir rbcl-wheelhouse
