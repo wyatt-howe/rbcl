@@ -25,8 +25,9 @@ version = package.split('version = "')[1].split('"')[0]
 release = version
 
 author = 'Nth Party, Ltd.'
-copyright = '2020, Nth Party, Ltd' # Period omitted; precedes punctuation.
+copyright = '2021, Nth Party, Ltd' # Period omitted; precedes punctuation.
 
+import rbcl  # flake8: noqa
 
 # -- General configuration ---------------------------------------------------
 
