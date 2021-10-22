@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import, division, print_function
 
 import errno
 import functools
@@ -20,7 +21,6 @@ import glob
 import os
 import os.path
 import platform
-import shutil
 import subprocess
 import sys
 from distutils.sysconfig import get_config_vars
@@ -34,7 +34,7 @@ except ImportError:
     from distutils.command.build_clib import build_clib as _build_clib
 
 
-requirements = []
+requirements = ["six"]
 setup_requirements = ["setuptools"]
 test_requirements = ["pytest>=3.2.1,!=3.3.0", "hypothesis>=3.27.0"]
 docs_requirements = ["sphinx>=1.6.5", "sphinx_rtd_theme"]
@@ -59,13 +59,27 @@ def abshere(*paths):
     return os.path.abspath(here(*paths))
 
 
-sodium = functools.partial(here, "src/libsodium/src/libsodium")
+sodium = functools.partial(here, "rbcl/libsodium/rbcl/libsodium")
 
 
-sys.path.insert(0, abshere("src"))
+sys.path.insert(0, abshere("rbcl"))
 
 
-import nacl  # noqa
+def which(name, flags=os.X_OK):  # Taken from twisted
+    result = []
+    exts = list(filter(None, os.environ.get("PATHEXT", "").split(os.pathsep)))
+    path = os.environ.get("PATH", None)
+    if path is None:
+        return []
+    for p in os.environ.get("PATH", "").split(os.pathsep):
+        p = os.path.join(p, name)
+        if os.access(p, flags):
+            result.append(p)
+        for e in exts:
+            pext = p + e
+            if os.access(pext, flags):
+                result.append(pext)
+    return result
 
 
 def use_system():
@@ -86,12 +100,15 @@ class Distribution(Distribution):
 
 class build_clib(_build_clib):
     def get_source_files(self):
-        files = glob.glob(here("src/libsodium/*"))
-        files += glob.glob(here("src/libsodium/*/*"))
-        files += glob.glob(here("src/libsodium/*/*/*"))
-        files += glob.glob(here("src/libsodium/*/*/*/*"))
-        files += glob.glob(here("src/libsodium/*/*/*/*/*"))
-        files += glob.glob(here("src/libsodium/*/*/*/*/*/*"))
+        files = glob.glob(here("rbcl/libsodium/*"))
+        files += glob.glob(here("rbcl/libsodium/*/*"))
+        files += glob.glob(here("rbcl/*"))
+        files += glob.glob(here("rbcl/bindings/*"))
+        files += glob.glob(here("rbcl/libsodium/*/*/*"))
+        files += glob.glob(here("rbcl/libsodium/*/*/*/*"))
+        files += glob.glob(here("rbcl/libsodium/*/*/*/*/*"))
+        files += glob.glob(here("rbcl/libsodium/*/*/*/*/*/*"))
+        files += glob.glob(here("rbcl/libsodium/*/*/*/*/*/*/*"))
 
         return files
 
@@ -127,22 +144,22 @@ class build_clib(_build_clib):
 
         # Ensure all of our executable files have their permission set
         for filename in [
-            "src/libsodium/autogen.sh",
-            "src/libsodium/compile",
-            "src/libsodium/configure",
-            "src/libsodium/depcomp",
-            "src/libsodium/install-sh",
-            "src/libsodium/missing",
-            "src/libsodium/msvc-scripts/process.bat",
-            "src/libsodium/test/default/wintest.bat",
+            "rbcl/libsodium/autogen.sh",
+            "rbcl/libsodium/compile",
+            "rbcl/libsodium/configure",
+            "rbcl/libsodium/depcomp",
+            "rbcl/libsodium/install-sh",
+            "rbcl/libsodium/missing",
+            "rbcl/libsodium/msvc-scripts/process.bat",
+            "rbcl/libsodium/test/default/wintest.bat",
         ]:
             os.chmod(here(filename), 0o755)
 
-        if not shutil.which("make"):
+        if not which("make"):
             raise Exception("ERROR: The 'make' utility is missing from PATH")
 
         # Locate our configure script
-        configure = abshere("src/libsodium/configure")
+        configure = abshere("rbcl/libsodium/configure")
 
         # Run ./configure
         configure_flags = [
@@ -195,39 +212,38 @@ class build_ext(_build_ext):
         return _build_ext.run(self)
 
 
-README = open("README.rst").read()
-INSTALL = open("INSTALL.rst").read()
-CHANGELOG = open("CHANGELOG.rst").read()
 
+with open("README.rst", "r") as fh:
+    long_description = fh.read().replace(".. include:: toc.rst\n\n", "")
+
+# The lines below are parsed by `docs/conf.py`.
+name = "rbcl"
+version = "0.1.7"
 
 setup(
-    name=nacl.__title__,
-    version=nacl.__version__,
-    description=nacl.__summary__,
-    long_description="\n".join((README, INSTALL, CHANGELOG)),
-    url=nacl.__uri__,
-    license=nacl.__license__,
-    author=nacl.__author__,
-    author_email=nacl.__email__,
-    python_requires=">=3.6",
-    setup_requires=setup_requirements,
-    install_requires=requirements,
-    extras_require={"tests": test_requirements, "docs": docs_requirements},
-    tests_require=test_requirements,
-    package_dir={"": "src"},
-    packages=["nacl", "nacl.pwhash", "nacl.bindings"],
-    ext_package="nacl",
-    cffi_modules=["src/bindings/build.py:ffi"],
-    cmdclass={"build_clib": build_clib, "build_ext": build_ext},
+    name=name,
+    version=version,
+    license="Apache",
+    url="https://github.com/nthparty/rbcl",
+    author="Wyatt Howe",
+    author_email="whowe@bu.edu",
+    description="Python binding to the Ristretto group operations in NaCl.",
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
+    test_suite="nose.collector",
+    tests_require=["nose"],
+    install_requires=['cffi', 'six'],
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+    package_dir={"": "rbcl"},
+    packages=["rbcl", "rbcl.bindings"],
+    ext_package="rbcl",
+    cffi_modules=[
+        "rbcl/bindings/build.py:ffi",
+    ],
+    cmdclass={
+        "build_clib": build_clib,
+        "build_ext": build_ext,
+    },
     distclass=Distribution,
     zip_safe=False,
-    classifiers=[
-        "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python :: Implementation :: PyPy",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-    ],
 )

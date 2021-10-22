@@ -1,36 +1,125 @@
-===============================================
-PyNaCl: Python binding to the libsodium library
-===============================================
+====
+RbCl
+====
 
-.. image:: https://img.shields.io/pypi/v/pynacl.svg
-    :target: https://pypi.org/project/PyNaCl/
-    :alt: Latest Version
+Ristretto group Python binding to
+`libsodium <https://github.com/jedisct1/libsodium>`__
 
-.. image:: https://codecov.io/github/pyca/pynacl/coverage.svg?branch=main
-    :target: https://codecov.io/github/pyca/pynacl?branch=main
+RbCl supports Python 2.7 and 3.5+ as well as PyPy 2.6+.
 
-.. image:: https://img.shields.io/pypi/pyversions/pynacl.svg
-    :target: https://pypi.org/project/PyNaCl/
-    :alt: Compatible Python Versions
+.. code:: python
 
-PyNaCl is a Python binding to `libsodium`_, which is a fork of the
-`Networking and Cryptography library`_. These libraries have a stated goal of
-improving usability, security and speed. It supports Python 3.6+ as well as
-PyPy 3.
+    import rbcl.bindings as lib
 
-.. _libsodium: https://github.com/jedisct1/libsodium
-.. _Networking and Cryptography library: https://nacl.cr.yp.to/
+    x = lib.crypto_core_ristretto255_random()
+    assert lib.crypto_core_ristretto255_is_valid_point(x)
 
-Features
---------
+    y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64)
+    assert lib.crypto_core_ristretto255_is_valid_point(y)
+    
+    z1 = lib.crypto_core_ristretto255_add(x, y)
+    z2 = lib.crypto_core_ristretto255_add(y, x)
+    assert z1 == z2  # Assert that point addition commutes (in L)
+    
+    s1 = lib.crypto_core_ristretto255_scalar_random()
+    s2 = lib.crypto_core_ristretto255_scalar_random()
+    w1 = lib.crypto_scalarmult_ristretto255(s1, lib.crypto_scalarmult_ristretto255(s2, x))
+    w2 = lib.crypto_scalarmult_ristretto255(s2, lib.crypto_scalarmult_ristretto255(s1, x))
+    assert w1 == w2  # Assert that point multiplication (by a scalar) is repeated addition (in L)
 
-* Digital signatures
-* Secret-key encryption
-* Public-key encryption
-* Hashing and message authentication
-* Password based key derivation and password hashing
+The following bindings are made available:
 
-`Changelog`_
-------------
+`Constructors <https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#encoded-element-validation>`__
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. _Changelog: https://pynacl.readthedocs.io/en/stable/changelog/
+.. code:: python
+
+    crypto_core_ristretto255_random()
+    crypto_core_ristretto255_from_hash(h)
+    crypto_core_ristretto255_is_valid_point(p)
+
+`Scalar arithmetic <https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#scalar-arithmetic-over-l>`__
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    crypto_core_ristretto255_scalar_add(s1, s2)
+    crypto_core_ristretto255_scalar_sub(s1, s2)
+    crypto_core_ristretto255_scalar_mul(s1, s2)  # NOT scalar mulitplication of a point!
+    crypto_core_ristretto255_scalar_complement(s)
+    crypto_core_ristretto255_scalar_invert(s)
+    crypto_core_ristretto255_scalar_negate(s)
+    crypto_core_ristretto255_scalar_reduce(s)
+    crypto_core_ristretto255_scalar_random()
+
+`Point arithmetic <https://libsodium.gitbook.io/doc/advanced/point-arithmetic/ristretto#scalar-multiplication>`__
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    crypto_core_ristretto255_add(p, q)
+    crypto_core_ristretto255_sub(p, q)
+    crypto_scalarmult_ristretto255(p, s)
+    crypto_scalarmult_ristretto255_base(s)
+
+Constants
+~~~~~~~~~
+
+::
+
+    crypto_scalarmult_ristretto255_bytes
+    crypto_scalarmult_ristretto255_scalarbytes
+    crypto_core_ristretto255_bytes
+    crypto_core_ristretto255_scalarbytes
+    crypto_core_ristretto255_hashbytes
+    crypto_core_ristretto255_nonreducedscalarbytes
+
+Helpers
+~~~~~~~
+
+::
+
+    randombytes
+    randombytes_buf_deterministic
+    sodium_bin2hex
+    sodium_hex2bin
+    sodium_base642bin
+    sodium_base64_encoded_len
+    sodium_bin2base64
+    sodium_pad
+    sodium_unpad
+
+===================================
+Manual installation
+===================================
+
+.. code:: shell
+
+    # Build as a wheel and install
+    python setup.py bdist_wheel
+    python -m pip install -f wheelhouse --no-index rbcl
+    python -m nose
+
+===================================
+Publishing [for Nth Party]
+===================================
+
+.. code:: shell
+    
+    # Package source distribution
+    python setup.py sdist
+    
+    # Run wheel-builder.yml and save/download artifacts locally, e.g. in ./dist
+    # Then, upload to PyPi
+    twine upload dist/rbcl-0.1.1*
+
+===================================
+Documentation
+===================================
+.. include:: toc.rst
+
+The documentation can be generated automatically from the source files using `Sphinx <https://www.sphinx-doc.org/>`_::
+
+    cd docs
+    python -m pip install -r requirements.txt
+    sphinx-apidoc -f -E --templatedir=_templates -o _source .. ../setup.py && make html
