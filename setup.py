@@ -218,7 +218,7 @@ with open("README.rst", "r") as fh:
 
 # The lines below are parsed by `docs/conf.py`.
 name = "rbcl"
-version = "0.1.7"
+version = "0.1.8"
 
 setup(
     name=name,
