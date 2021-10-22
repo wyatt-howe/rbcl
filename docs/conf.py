@@ -27,10 +27,9 @@ release = version
 author = 'Nth Party, Ltd.'
 copyright = '2020, Nth Party, Ltd' # Period omitted; precedes punctuation.
 
+import rbcl  # flake8: noqa
 
 # -- General configuration ---------------------------------------------------
-
-import rbcl
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
