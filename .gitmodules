@@ -1,3 +1,0 @@
-[submodule "rbcl/libsodium"]
-	path = rbcl/libsodium
-	url = https://github.com/wyatt-howe/libsodium-1.0.18.tar.gz
