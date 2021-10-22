@@ -30,6 +30,8 @@ copyright = '2020, Nth Party, Ltd' # Period omitted; precedes punctuation.
 
 # -- General configuration ---------------------------------------------------
 
+import rbcl
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
