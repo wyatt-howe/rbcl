@@ -44,8 +44,6 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
     :type p: bytes
     :return: point validity
     :rtype: bool
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -60,20 +58,17 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
 
 def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned char *p, const unsigned char *q);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Add two points on the ristretto255 curve.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
+    :param p: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
+              representing a point on the ristretto255 curve
     :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
+    :param q: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
+              representing a point on the ristretto255 curve
     :type q: bytes
-    :return: an integer represented as a
-              :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
+    :return: a point on the ristretto255 curve represented as
+             a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -96,20 +91,17 @@ def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned cha
 
 def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned char *p, const unsigned char *q);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Subtract a point from another on the ristretto255 curve.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
+    :param p: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
+              representing a point on the ristretto255 curve
     :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
+    :param q: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
+              representing a point on the ristretto255 curve
     :type q: bytes
-    :return: an integer represented as a
-              :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
+    :return: a point on the ristretto255 curve represented as
+             a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -132,20 +124,16 @@ def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned cha
 
 def crypto_core_ristretto255_from_hash(h):  # (unsigned char *p, const unsigned char *r);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Map a 64-byte vector ``h`` (usually the output of a hash function) to a ristretto255
+    group element (a point), and output its representation in bytes.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type q: bytes
+    :param h: a :py:data:`.crypto_core_ristretto255_HASHBYTES`
+              long bytes sequence ideally representing a hash digest
+    :type h: bytes
+
     :return: an integer represented as a
-              :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
+              :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -166,20 +154,11 @@ def crypto_core_ristretto255_from_hash(h):  # (unsigned char *p, const unsigned 
 
 def crypto_core_ristretto255_random():  # (unsigned char *p);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Returns a ristretto255 group element (point).
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type q: bytes
     :return: an integer represented as a
-              :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
+              :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -191,20 +170,13 @@ def crypto_core_ristretto255_random():  # (unsigned char *p);
 
 def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Returns a :py:data:`.crypto_core_ristretto255_SCALARBYTES` byte long
+    representation of the scalar in the ``[0..L]`` interval, ``L`` being the
+    order of the group ``(2^252 + 27742317777372353535851937790883648493)``.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type q: bytes
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -216,20 +188,18 @@ def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
 
 def crypto_core_ristretto255_scalar_invert(p):  # (unsigned char *recip, const unsigned char *s);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Return the multiplicative inverse of integer ``s`` modulo ``L``,
+    i.e an integer ``i`` such that ``s * i = 1 (mod L)``, where ``L``
+    is the order of the main subgroup.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
+    Raises a ``exc.RuntimeError`` if ``s`` is the integer zero.
+
+    :param s: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
-    :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type q: bytes
+    :type s: bytes
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -250,20 +220,15 @@ def crypto_core_ristretto255_scalar_invert(p):  # (unsigned char *recip, const u
 
 def crypto_core_ristretto255_scalar_negate(p):  # (unsigned char *neg, const unsigned char *s);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Return the integer ``n`` such that ``s + n = 0 (mod L)``, where ``L``
+    is the order of the main subgroup.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
+    :param s: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
-    :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type q: bytes
+    :type s: bytes
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -284,20 +249,16 @@ def crypto_core_ristretto255_scalar_negate(p):  # (unsigned char *neg, const uns
 
 def crypto_core_ristretto255_scalar_complement(p):  # (unsigned char *comp, const unsigned char *s);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
+    Return the complement of integer ``s`` modulo ``L``, i.e. an integer
+    ``c`` such that ``s + c = 1 (mod L)``, where ``L`` is the order of
     the main subgroup.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
+    :param s: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
-    :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type q: bytes
+    :type s: bytes
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -331,8 +292,6 @@ def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsig
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -355,8 +314,8 @@ def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsig
 
 def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Subtract integers ``p`` and ``q`` modulo ``L``, where ``L`` is the
+    order of the main subgroup.
 
     :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
@@ -367,8 +326,6 @@ def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsig
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -392,8 +349,8 @@ def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsig
 def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
     
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Multiply integers ``p`` and ``q`` modulo ``L``, where ``L`` is the
+    order of the main subgroup.
 
     :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
@@ -404,8 +361,6 @@ def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsig
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(
@@ -428,20 +383,15 @@ def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsig
 
 def crypto_core_ristretto255_scalar_reduce(p):  # (unsigned char *r, const unsigned char *s);
     """
-    Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
-    the main subgroup.
+    Reduce integer ``s`` to ``s`` modulo ``L``, where ``L`` is the order
+    of the main subgroup.
 
-    :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
+    :param s: a :py:data:`.crypto_core_ristretto255_NONREDUCEDSCALARBYTES`
               long bytes sequence representing an integer
-    :type p: bytes
-    :param q: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
-              long bytes sequence representing an integer
-    :type q: bytes
+    :type s: bytes
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
-    :raises rbcl.exceptions.UnavailableError: If called when using a
-        minimal build of libsodium.
     """
 
     ensure(

@@ -214,11 +214,15 @@ class build_ext(_build_ext):
 
 
 with open("README.rst", "r") as fh:
-    long_description = fh.read()
+    long_description = fh.read().replace(".. include:: toc.rst\n\n", "")
+
+# The lines below are parsed by `docs/conf.py`.
+name = "rbcl"
+version = "0.1.7"
 
 setup(
-    name="rbcl",
-    version="0.1.7",
+    name=name,
+    version=version,
     license="Apache",
     url="https://github.com/nthparty/rbcl",
     author="Wyatt Howe",

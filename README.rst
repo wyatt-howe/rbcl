@@ -112,3 +112,14 @@ Publishing [for Nth Party]
     # Run wheel-builder.yml and save/download artifacts locally, e.g. in ./dist
     # Then, upload to PyPi
     twine upload dist/rbcl-0.1.1*
+
+===================================
+Documentation
+===================================
+.. include:: toc.rst
+
+The documentation can be generated automatically from the source files using `Sphinx <https://www.sphinx-doc.org/>`_::
+
+    cd docs
+    python -m pip install -r requirements.txt
+    sphinx-apidoc -f -E --templatedir=_templates -o _source .. ../setup.py && make html
