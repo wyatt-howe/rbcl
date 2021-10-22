@@ -30,7 +30,11 @@ jobs:
           cd rbcl-main
           curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output libsodium.tar.gz
           tar -xvzf libsodium.tar.gz
+          rm -Rf rbcl/libsodium
           mv libsodium-1.0.18 rbcl/libsodium
+          ls rbcl
+          echo;echo;echo
+          ls rbcl/libsodium
           rm libsodium.tar.gz
           cd ..
       - name: Build the wheel
@@ -95,7 +99,11 @@ jobs:
           cd rbcl-main
           curl -L https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz --output libsodium.tar.gz
           tar -xvzf libsodium.tar.gz
+          rm -Rf rbcl/libsodium
           mv libsodium-1.0.18 rbcl/libsodium
+          ls rbcl
+          echo;echo;echo
+          ls rbcl/libsodium
           rm libsodium.tar.gz
       - name: Build the wheel
         run: |
