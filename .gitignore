@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+rbcl/libsodium/
 develop-eggs/
 dist/
 downloads/
@@ -131,4 +132,5 @@ dmypy.json
 # Coverage reports
 cover/
 
+# macOS
 .DS_Store
