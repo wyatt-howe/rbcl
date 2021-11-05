@@ -5,7 +5,25 @@ RbCl
 Ristretto group Python binding to
 `libsodium <https://github.com/jedisct1/libsodium>`__
 
-RbCl supports Python 2.7 and 3.5+ as well as PyPy 2.6+.
+|pypi| |readthedocs| |actions| |coveralls|
+
+.. |pypi| image:: https://badge.fury.io/py/rbcl.svg
+   :target: https://badge.fury.io/py/rbcl
+   :alt: PyPI version and link.
+
+.. |readthedocs| image:: https://readthedocs.org/projects/rbcl/badge/?version=latest
+   :target: https://rbcl.readthedocs.io/en/latest/?badge=latest
+   :alt: Read the Docs documentation status.
+
+.. |actions| image:: https://github.com/nthparty/rbcl/workflows/Wheel%20Builder/badge.svg
+   :target: https://github.com/nthparty/rbcl/actions
+   :alt: GitHub Actions status.
+
+.. |coveralls| image:: https://coveralls.io/repos/github/nthparty/rbcl/badge.svg?branch=main
+   :target: https://coveralls.io/github/nthparty/rbcl?branch=main
+   :alt: Coveralls test coverage summary.
+
+RbCl supports Python 3.7, 3.8 and 3.9.
 
 .. code:: python
 
@@ -101,7 +119,7 @@ Manual installation
     python -m nose
 
 ===================================
-Publishing [for Nth Party]
+Publishing (for Maintainers Only)
 ===================================
 
 .. code:: shell

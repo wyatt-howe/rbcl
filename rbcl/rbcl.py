@@ -1,38 +1,32 @@
-# Copyright 2018 Donald Stufft and individual contributors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+"""
+Python library that provides a simple interface for symmetric (*i.e.*,
+secret-key) and asymmetric (*i.e.*, public-key) encryption/decryption
+primitives.
 
-from __future__ import absolute_import, division, print_function
+This library exports a number of classes (derived from ``bytes``) for
+representing keys, nonces, plaintexts, and ciphertexts. It also exports
+two classes :obj:`symmetric` and :obj:`asymmetric` that have only static
+methods (for key generation and encryption/decryption).
+"""
+from __future__ import annotations
+from typing import Optional, Union
+import doctest
+import os
+import base64
 
-from rbcl import exceptions as exc
-from rbcl._sodium import ffi, lib
-from rbcl.exceptions import ensure
+try:
+    from rbcl import _sodium
+except: # pylint: disable=W0702 # pragma: no cover
+    # Support for direct invocation in order to execute doctests.
+    import _sodium
 
-
-has_crypto_core_ristretto255 = bool(lib.PYNACL_HAS_CRYPTO_CORE_RISTRETTO255)
-
-crypto_core_ristretto255_BYTES = 0
-crypto_core_ristretto255_SCALARBYTES = 0
-crypto_core_ristretto255_NONREDUCEDSCALARBYTES = 0
-
-if has_crypto_core_ristretto255:
-    crypto_core_ristretto255_BYTES = lib.crypto_core_ristretto255_bytes()
-    crypto_core_ristretto255_SCALARBYTES = lib.crypto_core_ristretto255_scalarbytes()
-    crypto_core_ristretto255_NONREDUCEDSCALARBYTES = (
-        lib.crypto_core_ristretto255_nonreducedscalarbytes()
-    )
-    crypto_core_ristretto255_HASHBYTES = lib.crypto_core_ristretto255_hashbytes()
-
+crypto_scalarmult_ristretto255_BYTES = _sodium.lib.crypto_scalarmult_ristretto255_bytes()
+crypto_scalarmult_ristretto255_SCALARBYTES = _sodium.lib.crypto_scalarmult_ristretto255_scalarbytes()
+crypto_core_ristretto255_BYTES = _sodium.lib.crypto_core_ristretto255_bytes()
+crypto_core_ristretto255_HASHBYTES = _sodium.lib.crypto_core_ristretto255_hashbytes()
+crypto_core_ristretto255_NONREDUCEDSCALARBYTES = _sodium.lib.crypto_core_ristretto255_nonreducedscalarbytes()
+crypto_core_ristretto255_SCALARBYTES = _sodium.lib.crypto_core_ristretto255_scalarbytes()
+randombytes_SEEDBYTES = _sodium.lib.randombytes_seedbytes()
 
 def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
     """
@@ -45,16 +39,14 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
     :return: point validity
     :rtype: bool
     """
-
     ensure(
         isinstance(p, bytes) and len(p) == crypto_core_ristretto255_BYTES,
         "Point must be a " + str(crypto_core_ristretto255_BYTES) + "long bytes sequence",
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     rc = lib.crypto_core_ristretto255_is_valid_point(p)
     return rc == 1
-
 
 def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned char *p, const unsigned char *q);
     """
@@ -70,7 +62,6 @@ def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned cha
              a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and isinstance(q, bytes)
@@ -79,7 +70,7 @@ def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned cha
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_BYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
@@ -87,7 +78,6 @@ def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned cha
     lib.crypto_core_ristretto255_add(r, p, q)
 
     return ffi.buffer(r, crypto_core_ristretto255_BYTES)[:]
-
 
 def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned char *p, const unsigned char *q);
     """
@@ -103,7 +93,6 @@ def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned cha
              a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and isinstance(q, bytes)
@@ -112,7 +101,7 @@ def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned cha
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_BYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
@@ -120,7 +109,6 @@ def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned cha
     lib.crypto_core_ristretto255_sub(r, p, q)
 
     return ffi.buffer(r, crypto_core_ristretto255_BYTES)[:]
-
 
 def crypto_core_ristretto255_from_hash(h):  # (unsigned char *p, const unsigned char *r);
     """
@@ -135,14 +123,13 @@ def crypto_core_ristretto255_from_hash(h):  # (unsigned char *p, const unsigned 
               :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(h, bytes)
         and len(h) == crypto_core_ristretto255_HASHBYTES,
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_HASHBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
@@ -150,7 +137,6 @@ def crypto_core_ristretto255_from_hash(h):  # (unsigned char *p, const unsigned 
     lib.crypto_core_ristretto255_from_hash(r, h)
 
     return ffi.buffer(r, crypto_core_ristretto255_BYTES)[:]
-
 
 def crypto_core_ristretto255_random():  # (unsigned char *p);
     """
@@ -166,7 +152,6 @@ def crypto_core_ristretto255_random():  # (unsigned char *p);
     lib.crypto_core_ristretto255_random(r)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
-
 
 def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     """
@@ -185,14 +170,13 @@ def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-
 def crypto_core_ristretto255_scalar_invert(p):  # (unsigned char *recip, const unsigned char *s);
     """
     Return the multiplicative inverse of integer ``s`` modulo ``L``,
     i.e an integer ``i`` such that ``s * i = 1 (mod L)``, where ``L``
     is the order of the main subgroup.
 
-    Raises a ``exc.RuntimeError`` if ``s`` is the integer zero.
+    Raises a ``RuntimeError`` if ``s`` is the integer zero.
 
     :param s: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
@@ -201,14 +185,13 @@ def crypto_core_ristretto255_scalar_invert(p):  # (unsigned char *recip, const u
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and len(p) == crypto_core_ristretto255_SCALARBYTES,
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_SCALARBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -216,7 +199,6 @@ def crypto_core_ristretto255_scalar_invert(p):  # (unsigned char *recip, const u
     lib.crypto_core_ristretto255_scalar_invert(r, p)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
-
 
 def crypto_core_ristretto255_scalar_negate(p):  # (unsigned char *neg, const unsigned char *s);
     """
@@ -230,14 +212,13 @@ def crypto_core_ristretto255_scalar_negate(p):  # (unsigned char *neg, const uns
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and len(p) == crypto_core_ristretto255_SCALARBYTES,
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_SCALARBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -245,7 +226,6 @@ def crypto_core_ristretto255_scalar_negate(p):  # (unsigned char *neg, const uns
     lib.crypto_core_ristretto255_scalar_negate(r, p)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
-
 
 def crypto_core_ristretto255_scalar_complement(p):  # (unsigned char *comp, const unsigned char *s);
     """
@@ -260,14 +240,13 @@ def crypto_core_ristretto255_scalar_complement(p):  # (unsigned char *comp, cons
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and len(p) == crypto_core_ristretto255_SCALARBYTES,
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_SCALARBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -275,7 +254,6 @@ def crypto_core_ristretto255_scalar_complement(p):  # (unsigned char *comp, cons
     lib.crypto_core_ristretto255_scalar_complement(r, p)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
-
 
 def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
     
@@ -293,7 +271,6 @@ def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and isinstance(q, bytes)
@@ -302,7 +279,7 @@ def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsig
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_SCALARBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -310,7 +287,6 @@ def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsig
     lib.crypto_core_ristretto255_scalar_add(r, p, q)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
-
 
 def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
     """
@@ -327,7 +303,6 @@ def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and isinstance(q, bytes)
@@ -336,7 +311,7 @@ def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsig
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_SCALARBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -344,7 +319,6 @@ def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsig
     lib.crypto_core_ristretto255_scalar_sub(r, p, q)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
-
 
 def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
     
@@ -362,7 +336,6 @@ def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and isinstance(q, bytes)
@@ -371,7 +344,7 @@ def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsig
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_SCALARBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -379,7 +352,6 @@ def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsig
     lib.crypto_core_ristretto255_scalar_mul(r, p, q)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
-
 
 def crypto_core_ristretto255_scalar_reduce(p):  # (unsigned char *r, const unsigned char *s);
     """
@@ -393,14 +365,13 @@ def crypto_core_ristretto255_scalar_reduce(p):  # (unsigned char *r, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-
     ensure(
         isinstance(p, bytes)
         and len(p) == crypto_core_ristretto255_SCALARBYTES,
         "Each integer must be a {} long bytes sequence".format(
             crypto_core_ristretto255_SCALARBYTES
         ),
-        raising=exc.TypeError,
+        raising=TypeError,
     )
 
     r = ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
@@ -408,3 +379,114 @@ def crypto_core_ristretto255_scalar_reduce(p):  # (unsigned char *r, const unsig
     lib.crypto_core_ristretto255_scalar_reduce(r, p)
 
     return ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
+
+def crypto_scalarmult_ristretto255_base(n):
+    """
+    Computes and returns the scalar product of a standard group element and an
+    integer ``n`` on the ristretto255 curve.
+
+    :param n: a :py:data:`.crypto_scalarmult_ristretto255_SCALARBYTES` long bytes
+              sequence representing a scalar
+    :type n: bytes
+    :return: a point on the ristretto255 curve, represented as a
+             :py:data:`.crypto_scalarmult_ristretto255_BYTES` long bytes sequence
+    :rtype: bytes
+    """
+    ensure(
+        isinstance(n, bytes)
+        and len(n) == crypto_scalarmult_ristretto255_SCALARBYTES,
+        "Input must be a {} long bytes sequence".format(
+            crypto_scalarmult_ristretto255_SCALARBYTES
+        ),
+        raising=TypeError,
+    )
+
+    q = ffi.new("unsigned char[]", crypto_scalarmult_ristretto255_BYTES)
+
+    rc = lib.crypto_scalarmult_ristretto255_base(q, n)
+    ensure(rc == 0, "Unexpected library error", raising=RuntimeError)
+
+    return ffi.buffer(q, crypto_scalarmult_ristretto255_BYTES)[:]
+
+def crypto_scalarmult_ristretto255(n, p):
+    """
+    Computes and returns the scalar product of a *clamped* integer ``n``
+    and the given group element on the ristretto255 curve.
+    The scalar is clamped, as done in the public key generation case,
+    by setting to zero the bits in position [0, 1, 2, 255] and setting
+    to one the bit in position 254.
+
+    :param n: a :py:data:`.crypto_scalarmult_ristretto255_SCALARBYTES` long bytes
+              sequence representing a scalar
+    :type n: bytes
+    :param p: a :py:data:`.crypto_scalarmult_ristretto255_BYTES` long bytes sequence
+              representing a point on the ristretto255 curve
+    :type p: bytes
+    :return: a point on the ristretto255 curve, represented as a
+             :py:data:`.crypto_scalarmult_ristretto255_BYTES` long bytes sequence
+    :rtype: bytes
+    """
+    ensure(
+        isinstance(n, bytes)
+        and len(n) == crypto_scalarmult_ristretto255_SCALARBYTES,
+        "Input must be a {} long bytes sequence".format(
+            crypto_scalarmult_ristretto255_SCALARBYTES
+        ),
+        raising=TypeError,
+    )
+
+    ensure(
+        isinstance(p, bytes) and len(p) == crypto_scalarmult_ristretto255_BYTES,
+        "Input must be a {} long bytes sequence".format(
+            crypto_scalarmult_ristretto255_BYTES
+        ),
+        raising=TypeError,
+    )
+
+    q = ffi.new("unsigned char[]", crypto_scalarmult_ristretto255_BYTES)
+
+    rc = lib.crypto_scalarmult_ristretto255(q, n, p)
+    ensure(rc == 0, "Unexpected library error", raising=RuntimeError)
+
+    return ffi.buffer(q, crypto_scalarmult_ristretto255_BYTES)[:]
+
+def randombytes(size):
+    """
+    Returns ``size`` number of random bytes from a cryptographically secure
+    random source.
+
+    :param size: int
+    :rtype: bytes
+    """
+    buf = ffi.new("unsigned char[]", size)
+    lib.randombytes(buf, size)
+    return ffi.buffer(buf, size)[:]
+
+def randombytes_buf_deterministic(size, seed):
+    """
+    Returns ``size`` number of deterministically generated pseudorandom bytes
+    from a seed
+
+    :param size: int
+    :param seed: bytes
+    :rtype: bytes
+    """
+    if len(seed) != randombytes_SEEDBYTES:
+        raise TypeError(
+            "Deterministic random bytes must be generated from 32 bytes"
+        )
+
+    buf = ffi.new("unsigned char[]", size)
+    lib.randombytes_buf_deterministic(buf, size, seed)
+    return ffi.buffer(buf, size)[:]
+
+# Initializes sodium, picking the best implementations available for this
+# machine.
+def _sodium_init():
+    if _sodium.lib.sodium_init() == -1:
+        raise RuntimeError("libsodium error during initialization") # pragma: no cover
+
+_sodium.ffi.init_once(_sodium_init, "libsodium")
+
+if __name__ == "__main__":
+    doctest.testmod() # pragma: no cover

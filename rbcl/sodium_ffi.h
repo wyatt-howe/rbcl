@@ -1,29 +1,23 @@
-/* Copyright 2017 Donald Stufft and individual contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Declarations for the libsodium constants and functions invoked in
+ * the main Python module for this library via a cffi wrapper module.
  */
 
-#define crypto_core_ristretto255_BYTES 32
-#define crypto_core_ristretto255_HASHBYTES 64
-#define crypto_core_ristretto255_SCALARBYTES 32
-#define crypto_core_ristretto255_NONREDUCEDSCALARBYTES 64
+int sodium_memcmp(const void * const b1_, const void * const b2_, size_t len);
+int sodium_init();
 
-static const int PYNACL_HAS_CRYPTO_CORE_RISTRETTO255;
+// crypto_scalarmult_ristretto255
+size_t crypto_scalarmult_ristretto255_bytes(void);
+size_t crypto_scalarmult_ristretto255_scalarbytes(void);
 
-size_t crypto_core_ristretto255_bytes(void);
-size_t crypto_core_ristretto255_hashbytes(void);
-size_t crypto_core_ristretto255_scalarbytes(void);
-size_t crypto_core_ristretto255_nonreducedscalarbytes(void);
+int crypto_scalarmult_ristretto255_base(unsigned char *q, const unsigned char *n);
+int crypto_scalarmult_ristretto255(unsigned char *q, const unsigned char *n, const unsigned char *p);
+
+// csrypto_core_ristretto255
+size_t crypto_core_ristretto255_bytes();
+size_t crypto_core_ristretto255_hashbytes();
+size_t crypto_core_ristretto255_scalarbytes();
+size_t crypto_core_ristretto255_nonreducedscalarbytes();
 
 int crypto_core_ristretto255_is_valid_point(const unsigned char *p);
 int crypto_core_ristretto255_add(unsigned char *r, const unsigned char *p, const unsigned char *q);
@@ -38,3 +32,9 @@ void crypto_core_ristretto255_scalar_add(unsigned char *z, const unsigned char *
 void crypto_core_ristretto255_scalar_sub(unsigned char *z, const unsigned char *x, const unsigned char *y);
 void crypto_core_ristretto255_scalar_mul(unsigned char *z, const unsigned char *x, const unsigned char *y);
 void crypto_core_ristretto255_scalar_reduce(unsigned char *r, const unsigned char *s);
+
+// randombytes
+size_t randombytes_seedbytes();
+
+void randombytes(unsigned char * const buf, const unsigned long long buf_len);
+void randombytes_buf_deterministic(void * const buf, const size_t size, const unsigned char seed[32]);

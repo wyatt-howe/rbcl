@@ -1,11 +1,11 @@
 [run]
 branch = True
 source =
-    nacl
+    rbcl
     tests/
 
 [paths]
 source =
-   src/nacl
-   .tox/*/lib/python*/site-packages/nacl
-   .tox/pypy/site-packages/nacl
+   src/rbcl
+   .tox/*/lib/python*/site-packages/rbcl
+   .tox/pypy/site-packages/rbcl
