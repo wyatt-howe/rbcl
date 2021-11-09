@@ -1,5 +1,5 @@
 ====
-RbCl
+rbcl
 ====
 
 Ristretto group Python binding to
@@ -23,7 +23,7 @@ Ristretto group Python binding to
    :target: https://coveralls.io/github/nthparty/rbcl?branch=main
    :alt: Coveralls test coverage summary.
 
-RbCl supports Python 3.7, 3.8 and 3.9.
+rbcl supports Python 3.7, 3.8 and 3.9.
 
 .. code:: python
 
