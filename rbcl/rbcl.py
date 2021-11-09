@@ -1,12 +1,8 @@
 """
-Python library that provides a simple interface for symmetric (*i.e.*,
-secret-key) and asymmetric (*i.e.*, public-key) encryption/decryption
-primitives.
+Python library that provides wrappers around the Ristretto group operations in libsodium.
 
-This library exports a number of classes (derived from ``bytes``) for
-representing keys, nonces, plaintexts, and ciphertexts. It also exports
-two classes :obj:`symmetric` and :obj:`asymmetric` that have only static
-methods (for key generation and encryption/decryption).
+This library exports all libsodium methods related to the Ristretto group or RNG, including
+all `crypto_scalarmult*` methods and the `randombytes*` methods.
 """
 from __future__ import annotations
 from typing import Optional, Union
