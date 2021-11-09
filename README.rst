@@ -27,22 +27,22 @@ RbCl supports Python 3.7, 3.8 and 3.9.
 
 .. code:: python
 
-    import rbcl.bindings as lib
+    from rbcl import *
 
-    x = lib.crypto_core_ristretto255_random()
-    assert lib.crypto_core_ristretto255_is_valid_point(x)
+    x = crypto_core_ristretto255_random()
+    assert crypto_core_ristretto255_is_valid_point(x)
 
-    y = lib.crypto_core_ristretto255_from_hash(b'\xF0'*64)
-    assert lib.crypto_core_ristretto255_is_valid_point(y)
-    
-    z1 = lib.crypto_core_ristretto255_add(x, y)
-    z2 = lib.crypto_core_ristretto255_add(y, x)
+    y = crypto_core_ristretto255_from_hash(b'\xF0'*64)
+    assert crypto_core_ristretto255_is_valid_point(y)
+
+    z1 = crypto_core_ristretto255_add(x, y)
+    z2 = crypto_core_ristretto255_add(y, x)
     assert z1 == z2  # Assert that point addition commutes (in L)
-    
-    s1 = lib.crypto_core_ristretto255_scalar_random()
-    s2 = lib.crypto_core_ristretto255_scalar_random()
-    w1 = lib.crypto_scalarmult_ristretto255(s1, lib.crypto_scalarmult_ristretto255(s2, x))
-    w2 = lib.crypto_scalarmult_ristretto255(s2, lib.crypto_scalarmult_ristretto255(s1, x))
+
+    s1 = crypto_core_ristretto255_scalar_random()
+    s2 = crypto_core_ristretto255_scalar_random()
+    w1 = crypto_scalarmult_ristretto255(s1, crypto_scalarmult_ristretto255(s2, x))
+    w2 = crypto_scalarmult_ristretto255(s2, crypto_scalarmult_ristretto255(s1, x))
     assert w1 == w2  # Assert that point multiplication (by a scalar) is repeated addition (in L)
 
 The following bindings are made available:
