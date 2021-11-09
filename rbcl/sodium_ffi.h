@@ -7,8 +7,8 @@ int sodium_memcmp(const void * const b1_, const void * const b2_, size_t len);
 int sodium_init();
 
 // crypto_scalarmult_ristretto255
-size_t crypto_scalarmult_ristretto255_bytes(void);
-size_t crypto_scalarmult_ristretto255_scalarbytes(void);
+size_t crypto_scalarmult_ristretto255_bytes();
+size_t crypto_scalarmult_ristretto255_scalarbytes();
 
 int crypto_scalarmult_ristretto255_base(unsigned char *q, const unsigned char *n);
 int crypto_scalarmult_ristretto255(unsigned char *q, const unsigned char *n, const unsigned char *p);

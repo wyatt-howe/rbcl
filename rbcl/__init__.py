@@ -1,6 +1,5 @@
 """Allow users to use classes directly."""
 from rbcl.rbcl import\
-    crypto_scalarmult,\
     crypto_scalarmult_ristretto255,\
     crypto_scalarmult_ristretto255_BYTES,\
     crypto_scalarmult_ristretto255_SCALARBYTES,\
