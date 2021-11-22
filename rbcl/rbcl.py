@@ -35,7 +35,7 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
     form, on the main subgroup, and that the point doesn't have a small order.
 
     >>> p = crypto_core_ristretto255_random()
-    ... crypto_core_ristretto255_is_valid_point(p)
+    >>> crypto_core_ristretto255_is_valid_point(p)
     True
 
     :param p: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
@@ -58,6 +58,14 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
 def crypto_core_ristretto255_add(p, q):
     """
     Add two points on the ristretto255 curve.
+    
+    Example - Point addition commutes in L:
+    >>> x = crypto_core_ristretto255_random()
+    >>> y = crypto_core_ristretto255_from_hash(b'\xF0'*64)
+    >>> z1 = crypto_core_ristretto255_add(x, y)
+    >>> z2 = crypto_core_ristretto255_add(y, x)
+    >>> z1 == z2
+    True
 
     :param p: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
               representing a point on the ristretto255 curve
@@ -86,6 +94,14 @@ def crypto_core_ristretto255_add(p, q):
 def crypto_core_ristretto255_sub(p, q):
     """
     Subtract a point from another on the ristretto255 curve.
+    
+    Example - Point subtraction is the inverse of addition:
+    >>> p = crypto_core_ristretto255_from_hash(b'\xF0'*64)
+    >>> mask = crypto_core_ristretto255_random()
+    >>> masked = crypto_core_ristretto255_add(x, mask)
+    >>> unmasked = crypto_core_ristretto255_sub(masked, mask)
+    >>> p == unmasked
+    True
 
     :param p: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
               representing a point on the ristretto255 curve
@@ -116,6 +132,10 @@ def crypto_core_ristretto255_from_hash(h):
     Map a 64-byte vector ``h`` (usually the output of a hash function) to a ristretto255
     group element (a point), and output its representation in bytes.
 
+    >>> p = crypto_core_ristretto255_from_hash(b'\xF0'*64)
+    >>> crypto_core_ristretto255_is_valid_point(p)
+    True
+
     :param h: a :py:data:`.crypto_core_ristretto255_HASHBYTES`
               long bytes sequence ideally representing a hash digest
     :type h: bytes
@@ -141,6 +161,10 @@ def crypto_core_ristretto255_random():  # (unsigned char *p);
     """
     Returns a ristretto255 group element (point).
 
+    >>> p = crypto_core_ristretto255_random()
+    >>> crypto_core_ristretto255_is_valid_point(p)
+    True
+
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
@@ -160,6 +184,10 @@ def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     Returns a :py:data:`.crypto_core_ristretto255_SCALARBYTES` byte long
     representation of the scalar in the ``[0..L]`` interval, ``L`` being the
     order of the group ``(2^252 + 27742317777372353535851937790883648493)``.
+
+    >>> p = crypto_core_ristretto255_random()
+    >>> crypto_core_ristretto255_is_valid_point(p)
+    True
 
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
