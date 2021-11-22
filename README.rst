@@ -15,7 +15,7 @@ Ristretto group Python binding to
    :target: https://rbcl.readthedocs.io/en/latest/?badge=latest
    :alt: Read the Docs documentation status.
 
-.. |actions| image:: https://github.com/nthparty/rbcl/workflows/Wheel%20Builder/badge.svg
+.. |actions| image:: https://github.com/nthparty/rbcl/workflows/lint-test-build-upload/badge.svg
    :target: https://github.com/nthparty/rbcl/actions
    :alt: GitHub Actions status.
 
