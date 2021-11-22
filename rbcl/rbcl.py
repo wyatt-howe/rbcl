@@ -5,10 +5,7 @@ This library exports all libsodium methods related to the Ristretto group or RNG
 all `crypto_scalarmult*` methods and the `randombytes*` methods.
 """
 from __future__ import annotations
-from typing import Optional, Union
 import doctest
-import os
-import base64
 
 try:
     from rbcl import _sodium
@@ -16,13 +13,21 @@ except: # pylint: disable=W0702 # pragma: no cover
     # Support for direct invocation in order to execute doctests.
     import _sodium
 
-crypto_scalarmult_ristretto255_BYTES = _sodium.lib.crypto_scalarmult_ristretto255_bytes()
-crypto_scalarmult_ristretto255_SCALARBYTES = _sodium.lib.crypto_scalarmult_ristretto255_scalarbytes()
-crypto_core_ristretto255_BYTES = _sodium.lib.crypto_core_ristretto255_bytes()
-crypto_core_ristretto255_HASHBYTES = _sodium.lib.crypto_core_ristretto255_hashbytes()
-crypto_core_ristretto255_NONREDUCEDSCALARBYTES = _sodium.lib.crypto_core_ristretto255_nonreducedscalarbytes()
-crypto_core_ristretto255_SCALARBYTES = _sodium.lib.crypto_core_ristretto255_scalarbytes()
-randombytes_SEEDBYTES = _sodium.lib.randombytes_seedbytes()
+crypto_scalarmult_ristretto255_BYTES: int = \
+    _sodium.lib.crypto_scalarmult_ristretto255_bytes()
+crypto_scalarmult_ristretto255_SCALARBYTES: int = \
+    _sodium.lib.crypto_scalarmult_ristretto255_scalarbytes()
+crypto_core_ristretto255_BYTES: int = \
+    _sodium.lib.crypto_core_ristretto255_bytes()
+crypto_core_ristretto255_HASHBYTES: int = \
+    _sodium.lib.crypto_core_ristretto255_hashbytes()
+crypto_core_ristretto255_NONREDUCEDSCALARBYTES: int = \
+    _sodium.lib.crypto_core_ristretto255_nonreducedscalarbytes()
+crypto_core_ristretto255_SCALARBYTES: int = \
+    _sodium.lib.crypto_core_ristretto255_scalarbytes()
+randombytes_SEEDBYTES: int = \
+    _sodium.lib.randombytes_seedbytes()
+
 
 def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
     """
@@ -39,12 +44,14 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
         raise TypeError(
             "Point must be a " + str(crypto_core_ristretto255_BYTES) +
             "long bytes sequence"
-        ) # pragma: no cover
+        )  # pragma: no cover
 
     rc = _sodium.lib.crypto_core_ristretto255_is_valid_point(p)
     return rc == 1
 
-def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned char *p, const unsigned char *q);
+
+# (unsigned char *r, const unsigned char *p, const unsigned char *q);
+def crypto_core_ristretto255_add(p, q):
     """
     Add two points on the ristretto255 curve.
 
@@ -64,7 +71,7 @@ def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned cha
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_BYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
     r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
 
@@ -72,7 +79,9 @@ def crypto_core_ristretto255_add(p, q):  # (unsigned char *r, const unsigned cha
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_BYTES)[:]
 
-def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned char *p, const unsigned char *q);
+
+# (unsigned char *r, const unsigned char *p, const unsigned char *q);
+def crypto_core_ristretto255_sub(p, q):
     """
     Subtract a point from another on the ristretto255 curve.
 
@@ -92,7 +101,7 @@ def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned cha
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_BYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
     r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
 
@@ -100,7 +109,9 @@ def crypto_core_ristretto255_sub(p, q):  # (unsigned char *r, const unsigned cha
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_BYTES)[:]
 
-def crypto_core_ristretto255_from_hash(h):  # (unsigned char *p, const unsigned char *r);
+
+# (unsigned char *p, const unsigned char *r);
+def crypto_core_ristretto255_from_hash(h):
     """
     Map a 64-byte vector ``h`` (usually the output of a hash function) to a ristretto255
     group element (a point), and output its representation in bytes.
@@ -113,18 +124,20 @@ def crypto_core_ristretto255_from_hash(h):  # (unsigned char *p, const unsigned 
               :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(h, bytes) or len(h) != crypto_core_ristretto255_HASHBYTES:
+    if not isinstance(h, bytes) or len(
+            h) != crypto_core_ristretto255_HASHBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_HASHBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
     r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
 
     _sodium.lib.crypto_core_ristretto255_from_hash(r, h)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_BYTES)[:]
+
 
 def crypto_core_ristretto255_random():  # (unsigned char *p);
     """
@@ -135,11 +148,14 @@ def crypto_core_ristretto255_random():  # (unsigned char *p);
     :rtype: bytes
     """
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_random(r)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
+
 
 def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     """
@@ -152,13 +168,17 @@ def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     :rtype: bytes
     """
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_random(r)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-def crypto_core_ristretto255_scalar_invert(p):  # (unsigned char *recip, const unsigned char *s);
+
+# (unsigned char *recip, const unsigned char *s);
+def crypto_core_ristretto255_scalar_invert(p):
     """
     Return the multiplicative inverse of integer ``s`` modulo ``L``,
     i.e an integer ``i`` such that ``s * i = 1 (mod L)``, where ``L``
@@ -173,20 +193,25 @@ def crypto_core_ristretto255_scalar_invert(p):  # (unsigned char *recip, const u
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES:
+    if not isinstance(p, bytes) or len(
+            p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_invert(r, p)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-def crypto_core_ristretto255_scalar_negate(p):  # (unsigned char *neg, const unsigned char *s);
+
+# (unsigned char *neg, const unsigned char *s);
+def crypto_core_ristretto255_scalar_negate(p):
     """
     Return the integer ``n`` such that ``s + n = 0 (mod L)``, where ``L``
     is the order of the main subgroup.
@@ -198,20 +223,25 @@ def crypto_core_ristretto255_scalar_negate(p):  # (unsigned char *neg, const uns
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES:
+    if not isinstance(p, bytes) or len(
+            p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_negate(r, p)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-def crypto_core_ristretto255_scalar_complement(p):  # (unsigned char *comp, const unsigned char *s);
+
+# (unsigned char *comp, const unsigned char *s);
+def crypto_core_ristretto255_scalar_complement(p):
     """
     Return the complement of integer ``s`` modulo ``L``, i.e. an integer
     ``c`` such that ``s + c = 1 (mod L)``, where ``L`` is the order of
@@ -224,21 +254,25 @@ def crypto_core_ristretto255_scalar_complement(p):  # (unsigned char *comp, cons
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES:
+    if not isinstance(p, bytes) or len(
+            p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_complement(r, p)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
-    
+
+# (unsigned char *z, const unsigned char *x, const unsigned char *y);
+def crypto_core_ristretto255_scalar_add(p, q):
     """
     Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
     the main subgroup.
@@ -253,21 +287,26 @@ def crypto_core_ristretto255_scalar_add(p, q):  # (unsigned char *z, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES\
-       or not isinstance(q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
+    if not isinstance(
+            p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES or not isinstance(
+            q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_add(r, p, q)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
+
+# (unsigned char *z, const unsigned char *x, const unsigned char *y);
+def crypto_core_ristretto255_scalar_sub(p, q):
     """
     Subtract integers ``p`` and ``q`` modulo ``L``, where ``L`` is the
     order of the main subgroup.
@@ -282,22 +321,26 @@ def crypto_core_ristretto255_scalar_sub(p, q):  # (unsigned char *z, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES\
-       or not isinstance(q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
+    if not isinstance(
+            p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES or not isinstance(
+            q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_sub(r, p, q)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsigned char *x, const unsigned char *y);
-    
+
+# (unsigned char *z, const unsigned char *x, const unsigned char *y);
+def crypto_core_ristretto255_scalar_mul(p, q):
     """
     Multiply integers ``p`` and ``q`` modulo ``L``, where ``L`` is the
     order of the main subgroup.
@@ -312,21 +355,26 @@ def crypto_core_ristretto255_scalar_mul(p, q):  # (unsigned char *z, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES\
-       or not isinstance(q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
+    if not isinstance(
+            p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES or not isinstance(
+            q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_mul(r, p, q)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
 
-def crypto_core_ristretto255_scalar_reduce(p):  # (unsigned char *r, const unsigned char *s);
+
+# (unsigned char *r, const unsigned char *s);
+def crypto_core_ristretto255_scalar_reduce(p):
     """
     Reduce integer ``s`` to ``s`` modulo ``L``, where ``L`` is the order
     of the main subgroup.
@@ -338,18 +386,22 @@ def crypto_core_ristretto255_scalar_reduce(p):  # (unsigned char *r, const unsig
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES:
+    if not isinstance(p, bytes) or len(
+            p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
             "Each integer must be a {} long bytes sequence".format(
                 crypto_core_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_SCALARBYTES)
+    r = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_core_ristretto255_SCALARBYTES)
 
     _sodium.lib.crypto_core_ristretto255_scalar_reduce(r, p)
 
     return _sodium.ffi.buffer(r, crypto_core_ristretto255_SCALARBYTES)[:]
+
 
 def crypto_scalarmult_ristretto255_base(n):
     """
@@ -363,19 +415,25 @@ def crypto_scalarmult_ristretto255_base(n):
              :py:data:`.crypto_scalarmult_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(n, bytes) or len(n) != crypto_scalarmult_ristretto255_SCALARBYTES:
+    if not isinstance(n, bytes) or len(
+            n) != crypto_scalarmult_ristretto255_SCALARBYTES:
         raise TypeError(
             "Input must be a {} long bytes sequence".format(
                 crypto_scalarmult_ristretto255_SCALARBYTES
             )
-        ) # pragma: no cover
+        )  # pragma: no cover
 
-    q = _sodium.ffi.new("unsigned char[]", crypto_scalarmult_ristretto255_BYTES)
+    q = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_scalarmult_ristretto255_BYTES)
 
     if _sodium.lib.crypto_scalarmult_ristretto255_base(q, n) == -1:
-        raise RuntimeError("`n` cannot be larger than the size of the group or g^n is the identity element") # pragma: no cover
+        raise RuntimeError(
+            "`n` cannot be larger than the size of the group or g^n is the identity element"
+        )  # pragma: no cover
 
     return _sodium.ffi.buffer(q, crypto_scalarmult_ristretto255_BYTES)[:]
+
 
 def crypto_scalarmult_ristretto255(n, p):
     """
@@ -395,26 +453,32 @@ def crypto_scalarmult_ristretto255(n, p):
              :py:data:`.crypto_scalarmult_ristretto255_BYTES` long bytes sequence
     :rtype: bytes
     """
-    if not isinstance(n, bytes) or len(n) != crypto_scalarmult_ristretto255_SCALARBYTES:
+    if not isinstance(n, bytes) or len(
+            n) != crypto_scalarmult_ristretto255_SCALARBYTES:
         raise TypeError(
             "Input must be a {} long bytes sequence".format(
                 crypto_scalarmult_ristretto255_SCALARBYTES
             )
         )
 
-    if not isinstance(p, bytes) or len(p) != crypto_scalarmult_ristretto255_BYTES:
+    if not isinstance(p, bytes) or len(
+            p) != crypto_scalarmult_ristretto255_BYTES:
         raise TypeError(
             "Input must be a {} long bytes sequence".format(
                 crypto_scalarmult_ristretto255_BYTES
             )
         )
 
-    q = _sodium.ffi.new("unsigned char[]", crypto_scalarmult_ristretto255_BYTES)
+    q = _sodium.ffi.new(
+        "unsigned char[]",
+        crypto_scalarmult_ristretto255_BYTES)
 
     if _sodium.lib.crypto_scalarmult_ristretto255(q, n, p) == -1:
-        raise RuntimeError("`n` cannot be larger than the size of the group or p^n is the identity element")
+        raise RuntimeError(
+            "`n` cannot be larger than the size of the group or p^n is the identity element")
 
     return _sodium.ffi.buffer(q, crypto_scalarmult_ristretto255_BYTES)[:]
+
 
 def randombytes(size):
     """
@@ -427,6 +491,7 @@ def randombytes(size):
     buf = _sodium.ffi.new("unsigned char[]", size)
     _sodium.lib.randombytes(buf, size)
     return _sodium.ffi.buffer(buf, size)[:]
+
 
 def randombytes_buf_deterministic(size, seed):
     """
@@ -448,11 +513,15 @@ def randombytes_buf_deterministic(size, seed):
 
 # Initializes sodium, picking the best implementations available for this
 # machine.
+
+
 def _sodium_init():
     if _sodium.lib.sodium_init() == -1:
-        raise RuntimeError("libsodium error during initialization") # pragma: no cover
+        raise RuntimeError(
+            "libsodium error during initialization")  # pragma: no cover
+
 
 _sodium.ffi.init_once(_sodium_init, "libsodium")
 
 if __name__ == "__main__":
-    doctest.testmod() # pragma: no cover
+    doctest.testmod()  # pragma: no cover
