@@ -51,7 +51,7 @@ jobs:
           name: "rbcl-2.0.0-manylinux1-${{ matrix.PYTHON }}"
           path: rbcl-wheelhouse/
   macos:
-    runs-on: macOS-10.15
+    runs-on: macOS-latest
     strategy:
       matrix:
         PYTHON:
