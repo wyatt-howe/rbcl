@@ -122,7 +122,7 @@ Publishing (for Maintainers Only)
     
     # Run wheel-builder.yml and save/download artifacts locally, e.g. in ./dist
     # Then, upload to PyPi
-    twine upload dist/rbcl-0.1.1*
+    twine upload dist/rbcl-0.2.0*
 
 ===================================
 Documentation
