@@ -68,8 +68,7 @@ def crypto_core_ristretto255_add(p, q):
     if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_BYTES\
        or not isinstance(q, bytes) or len(q) != crypto_core_ristretto255_BYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_BYTES
+            f"Each integer must be a {crypto_core_ristretto255_BYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
@@ -97,8 +96,7 @@ def crypto_core_ristretto255_sub(p, q):
     if not isinstance(p, bytes) or len(p) != crypto_core_ristretto255_BYTES\
        or not isinstance(q, bytes) or len(q) != crypto_core_ristretto255_BYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_BYTES
+            f"Each integer must be a {crypto_core_ristretto255_BYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
@@ -125,8 +123,7 @@ def crypto_core_ristretto255_from_hash(h):
     if not isinstance(h, bytes) or len(
             h) != crypto_core_ristretto255_HASHBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_HASHBYTES
+            f"Each integer must be a {crypto_core_ristretto255_HASHBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new("unsigned char[]", crypto_core_ristretto255_BYTES)
@@ -193,8 +190,7 @@ def crypto_core_ristretto255_scalar_invert(p):
     if not isinstance(p, bytes) or len(
             p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_SCALARBYTES
+            f"Each integer must be a {crypto_core_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new(
@@ -222,8 +218,7 @@ def crypto_core_ristretto255_scalar_negate(p):
     if not isinstance(p, bytes) or len(
             p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_SCALARBYTES
+            f"Each integer must be a {crypto_core_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new(
@@ -252,8 +247,7 @@ def crypto_core_ristretto255_scalar_complement(p):
     if not isinstance(p, bytes) or len(
             p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_SCALARBYTES
+            f"Each integer must be a {crypto_core_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new(
@@ -285,8 +279,7 @@ def crypto_core_ristretto255_scalar_add(p, q):
             p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES or not isinstance(
             q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_SCALARBYTES
+            f"Each integer must be a {crypto_core_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new(
@@ -318,8 +311,7 @@ def crypto_core_ristretto255_scalar_sub(p, q):
             p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES or not isinstance(
             q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_SCALARBYTES
+            f"Each integer must be a {crypto_core_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new(
@@ -351,8 +343,7 @@ def crypto_core_ristretto255_scalar_mul(p, q):
             p, bytes) or len(p) != crypto_core_ristretto255_SCALARBYTES or not isinstance(
             q, bytes) or len(q) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_SCALARBYTES
+            f"Each integer must be a {crypto_core_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new(
@@ -380,8 +371,7 @@ def crypto_core_ristretto255_scalar_reduce(p):
     if not isinstance(p, bytes) or len(
             p) != crypto_core_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Each integer must be a {} long bytes sequence"
-                % crypto_core_ristretto255_SCALARBYTES
+            f"Each integer must be a {crypto_core_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     r = _sodium.ffi.new(
@@ -408,8 +398,7 @@ def crypto_scalarmult_ristretto255_base(n):
     if not isinstance(n, bytes) or len(
             n) != crypto_scalarmult_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Input must be a {} long bytes sequence"
-                % crypto_scalarmult_ristretto255_SCALARBYTES
+            f"Input must be a {crypto_scalarmult_ristretto255_SCALARBYTES} long bytes sequence"
         )  # pragma: no cover
 
     q = _sodium.ffi.new(
@@ -445,15 +434,13 @@ def crypto_scalarmult_ristretto255(n, p):
     if not isinstance(n, bytes) or len(
             n) != crypto_scalarmult_ristretto255_SCALARBYTES:
         raise TypeError(
-            "Input must be a {} long bytes sequence"
-                % crypto_scalarmult_ristretto255_SCALARBYTES
+            f"Input must be a {crypto_scalarmult_ristretto255_SCALARBYTES} long bytes sequence"
         )
 
     if not isinstance(p, bytes) or len(
             p) != crypto_scalarmult_ristretto255_BYTES:
         raise TypeError(
-            "Input must be a {} long bytes sequence"
-                % crypto_scalarmult_ristretto255_BYTES
+            f"Input must be a {crypto_scalarmult_ristretto255_BYTES} long bytes sequence"
         )
 
     q = _sodium.ffi.new(
