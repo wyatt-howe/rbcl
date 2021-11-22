@@ -99,13 +99,6 @@ Helpers
 
     randombytes
     randombytes_buf_deterministic
-    sodium_bin2hex
-    sodium_hex2bin
-    sodium_base642bin
-    sodium_base64_encoded_len
-    sodium_bin2base64
-    sodium_pad
-    sodium_unpad
 
 ===================================
 Manual installation
