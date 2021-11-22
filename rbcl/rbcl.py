@@ -185,6 +185,15 @@ def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     representation of the scalar in the ``[0..L]`` interval, ``L`` being the
     order of the group ``(2^252 + 27742317777372353535851937790883648493)``.
 
+    Example - All valid scalars have an inverse:
+    >>> s = crypto_core_ristretto255_scalar_random()
+    >>> p = crypto_core_ristretto255_random()
+    >>> masked = crypto_scalarmult_ristretto255(s, p)
+    >>> s_inv = crypto_core_ristretto255_scalar_invert(s)
+    >>> unmasked = crypto_scalarmult_ristretto255(s_inv, masked)
+    >>> unmasked == p
+    True
+
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
     :rtype: bytes
@@ -205,6 +214,15 @@ def crypto_core_ristretto255_scalar_invert(p):
     Return the multiplicative inverse of integer ``s`` modulo ``L``,
     i.e an integer ``i`` such that ``s * i = 1 (mod L)``, where ``L``
     is the order of the main subgroup.
+
+    Example - All scalars have a multiplicative inverse:
+    >>> s = crypto_core_ristretto255_scalar_random()
+    >>> p = crypto_core_ristretto255_random()
+    >>> masked = crypto_scalarmult_ristretto255(s, p)
+    >>> s_inv = crypto_core_ristretto255_scalar_invert(s)
+    >>> unmasked = crypto_scalarmult_ristretto255(s_inv, masked)
+    >>> unmasked == p
+    True
 
     Raises a ``RuntimeError`` if ``s`` is the integer zero.
 
@@ -236,6 +254,22 @@ def crypto_core_ristretto255_scalar_negate(p):
     Return the integer ``n`` such that ``s + n = 0 (mod L)``, where ``L``
     is the order of the main subgroup.
 
+    Example - All scalars have an additive inverse:
+    >>> s = crypto_core_ristretto255_scalar_random()
+    >>> s_inv = crypto_core_ristretto255_scalar_negate(s)
+    >>> zero = crypto_core_ristretto255_scalar_add(s, s_inv)
+    >>> s == crypto_core_ristretto255_scalar_add(s, zero)
+    True
+
+    Example - Multiplication by zero is not defined in the subgroup {point * s | scalars s}.
+    >>> p = crypto_core_ristretto255_random()
+    >>> try:
+    ...     zero_p = crypto_scalarmult_ristretto255(zero, p)
+    ... except RuntimeError as e:
+    ...     str(e) == "`n` cannot be larger than the size of "\
+                    + "the group or p^n is the identity element"
+    True
+
     :param s: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
     :type s: bytes
@@ -265,6 +299,14 @@ def crypto_core_ristretto255_scalar_complement(p):
     ``c`` such that ``s + c = 1 (mod L)``, where ``L`` is the order of
     the main subgroup.
 
+    Example - All scalars have an additive complement:
+    >>> s = crypto_core_ristretto255_scalar_random()
+    >>> s_comp = crypto_core_ristretto255_scalar_complement(s)
+    >>> one = crypto_core_ristretto255_scalar_add(s, s_comp)
+    >>> p = crypto_core_ristretto255_random()
+    >>> p == crypto_scalarmult_ristretto255(one, p)
+    True
+
     :param s: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
     :type s: bytes
@@ -292,6 +334,14 @@ def crypto_core_ristretto255_scalar_add(p, q):
     """
     Add integers ``p`` and ``q`` modulo ``L``, where ``L`` is the order of
     the main subgroup.
+
+    Example - Addition of two scalars is commutative:
+    >>> s1 = crypto_core_ristretto255_scalar_random()
+    >>> s2 = crypto_core_ristretto255_scalar_random()
+    >>> s12 = crypto_core_ristretto255_scalar_add(s1, s2)
+    >>> s21 = crypto_core_ristretto255_scalar_add(s2, s1)
+    >>> s12 == s21
+    True
 
     :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
@@ -325,6 +375,13 @@ def crypto_core_ristretto255_scalar_sub(p, q):
     Subtract integers ``p`` and ``q`` modulo ``L``, where ``L`` is the
     order of the main subgroup.
 
+    Example - Subtraction is the inverse of addition:
+    >>> s1 = crypto_core_ristretto255_scalar_random()
+    >>> s2 = crypto_core_ristretto255_scalar_random()
+    >>> s1_plus_s2 = crypto_core_ristretto255_scalar_add(s1, s2)
+    >>> s1 == crypto_core_ristretto255_scalar_sub(s1_plus_s2, s2)
+    True
+
     :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
     :type p: bytes
@@ -356,6 +413,14 @@ def crypto_core_ristretto255_scalar_mul(p, q):
     """
     Multiply integers ``p`` and ``q`` modulo ``L``, where ``L`` is the
     order of the main subgroup.
+
+    Example - Multiplication of two scalars is commutative:
+    >>> s1 = crypto_core_ristretto255_scalar_random()
+    >>> s2 = crypto_core_ristretto255_scalar_random()
+    >>> s1s2 = crypto_core_ristretto255_scalar_mul(s1, s2)
+    >>> s2s1 = crypto_core_ristretto255_scalar_mul(s2, s1)
+    >>> s1s2 == s2s1
+    True
 
     :param p: a :py:data:`.crypto_core_ristretto255_SCALARBYTES`
               long bytes sequence representing an integer
@@ -389,6 +454,16 @@ def crypto_core_ristretto255_scalar_reduce(p):
     Reduce integer ``s`` to ``s`` modulo ``L``, where ``L`` is the order
     of the main subgroup.
 
+    Example - Reduce a large value to a valid scalar:
+    >>> x = bytes.fromhex('FF'*32)
+    >>> s = crypto_core_ristretto255_scalar_reduce(x)
+    >>> p = crypto_core_ristretto255_random()
+    >>> masked = crypto_scalarmult_ristretto255(s, p)
+    >>> s_inv = crypto_core_ristretto255_scalar_invert(s)
+    >>> unmasked = crypto_scalarmult_ristretto255(s_inv, masked)
+    >>> unmasked == p
+    True
+
     :param s: a :py:data:`.crypto_core_ristretto255_NONREDUCEDSCALARBYTES`
               long bytes sequence representing an integer
     :type s: bytes
@@ -415,6 +490,11 @@ def crypto_scalarmult_ristretto255_base(n):
     """
     Computes and returns the scalar product of a standard group element and an
     integer ``n`` on the ristretto255 curve.
+
+    >>> s = crypto_core_ristretto255_scalar_random()
+    >>> gs = crypto_scalarmult_ristretto255_base(s)
+    >>> crypto_core_ristretto255_is_valid_point(gs)
+    True
 
     :param n: a :py:data:`.crypto_scalarmult_ristretto255_SCALARBYTES` long bytes
               sequence representing a scalar
@@ -449,6 +529,15 @@ def crypto_scalarmult_ristretto255(n, p):
     by setting to zero the bits in position [0, 1, 2, 255] and setting
     to one the bit in position 254.
 
+    Example - Scalar multiplication is an invertible operation.
+    >>> s = crypto_core_ristretto255_scalar_random()
+    >>> p = crypto_core_ristretto255_random()
+    >>> masked = crypto_scalarmult_ristretto255(s, p)
+    >>> s_inv = crypto_core_ristretto255_scalar_invert(s)
+    >>> unmasked = crypto_scalarmult_ristretto255(s_inv, masked)
+    >>> unmasked == p
+    True
+
     :param n: a :py:data:`.crypto_scalarmult_ristretto255_SCALARBYTES` long bytes
               sequence representing a scalar
     :type n: bytes
@@ -463,13 +552,13 @@ def crypto_scalarmult_ristretto255(n, p):
             n) != crypto_scalarmult_ristretto255_SCALARBYTES:
         raise TypeError(
             f"Input must be a {crypto_scalarmult_ristretto255_SCALARBYTES} long bytes sequence"
-        )
+        )  # pragma: no cover
 
     if not isinstance(p, bytes) or len(
             p) != crypto_scalarmult_ristretto255_BYTES:
         raise TypeError(
             f"Input must be a {crypto_scalarmult_ristretto255_BYTES} long bytes sequence"
-        )
+        )  # pragma: no cover
 
     q = _sodium.ffi.new(
         "unsigned char[]",
@@ -518,7 +607,7 @@ def randombytes_buf_deterministic(size, seed):
     if len(seed) != randombytes_SEEDBYTES:
         raise TypeError(
             "Deterministic random bytes must be generated from 32 bytes"
-        )
+        )  # pragma: no cover
 
     buf = _sodium.ffi.new("unsigned char[]", size)
     _sodium.lib.randombytes_buf_deterministic(buf, size, seed)
