@@ -487,6 +487,11 @@ def randombytes(size):
     Returns ``size`` number of random bytes from a cryptographically secure
     random source.
 
+    >>> r1 = randombytes(14)
+    >>> r2 = randombytes(14)
+    >>> r1 == r2  # 2^42 chance of one-off event (i.e. equality)
+    False
+
     :param size: int
     :rtype: bytes
     """
@@ -499,6 +504,12 @@ def randombytes_buf_deterministic(size, seed):
     """
     Returns ``size`` number of deterministically generated pseudorandom bytes
     from a seed
+
+    Example - Get the first 32 bytes from a stream seeded by 0x7070...70:
+    >>> r1 = randombytes_buf_deterministic(32, b'\x70'*32)
+    >>> r2 = randombytes_buf_deterministic(40, b'\x70'*32)
+    >>> r1 == r2[:32]
+    True
 
     :param size: int
     :param seed: bytes
