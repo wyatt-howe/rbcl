@@ -20,9 +20,9 @@ def prepare_libsodium_source_tree():
         'https://github.com/jedisct1/libsodium/releases' + \
         '/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz'
     )
-    libsodium_tar_gz_path = './rbcl/libsodium.tar.gz'
-    libsodium_tar_gz_folder = './rbcl/libsodium_tar_gz'
-    libsodium_folder = './rbcl/libsodium'
+    libsodium_tar_gz_path = '../rbcl/libsodium.tar.gz'
+    libsodium_tar_gz_folder = '../rbcl/libsodium_tar_gz'
+    libsodium_folder = '../rbcl/libsodium'
 
     # Download the source archive to a local path (unless
     # it is already present).
