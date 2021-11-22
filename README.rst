@@ -136,10 +136,6 @@ Documentation
 ===================================
 .. include:: toc.rst
 
-The library has one module:
-
- - `rbcl module <https://rbcl.readthedocs.io/en/latest/_source/rbcl.html>`_
-
 The documentation can be generated automatically from the source files using `Sphinx <https://www.sphinx-doc.org/>`_::
 
     cd docs
