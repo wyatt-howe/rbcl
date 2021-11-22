@@ -58,7 +58,7 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
 def crypto_core_ristretto255_add(p, q):
     """
     Add two points on the ristretto255 curve.
-    
+
     Example - Point addition commutes in L:
     >>> x = crypto_core_ristretto255_random()
     >>> y = crypto_core_ristretto255_from_hash(b'\x70'*64)
@@ -94,7 +94,7 @@ def crypto_core_ristretto255_add(p, q):
 def crypto_core_ristretto255_sub(p, q):
     """
     Subtract a point from another on the ristretto255 curve.
-    
+
     Example - Point subtraction is the inverse of addition:
     >>> p = crypto_core_ristretto255_from_hash(b'\x70'*64)
     >>> mask = crypto_core_ristretto255_random()
