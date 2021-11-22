@@ -98,7 +98,7 @@ def crypto_core_ristretto255_sub(p, q):
     Example - Point subtraction is the inverse of addition:
     >>> p = crypto_core_ristretto255_from_hash(b'\xF0'*64)
     >>> mask = crypto_core_ristretto255_random()
-    >>> masked = crypto_core_ristretto255_add(x, mask)
+    >>> masked = crypto_core_ristretto255_add(p, mask)
     >>> unmasked = crypto_core_ristretto255_sub(masked, mask)
     >>> p == unmasked
     True
@@ -184,10 +184,6 @@ def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     Returns a :py:data:`.crypto_core_ristretto255_SCALARBYTES` byte long
     representation of the scalar in the ``[0..L]`` interval, ``L`` being the
     order of the group ``(2^252 + 27742317777372353535851937790883648493)``.
-
-    >>> p = crypto_core_ristretto255_random()
-    >>> crypto_core_ristretto255_is_valid_point(p)
-    True
 
     :return: an integer represented as a
               :py:data:`.crypto_core_ristretto255_SCALARBYTES` long bytes sequence
