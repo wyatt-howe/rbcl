@@ -60,6 +60,7 @@ def crypto_core_ristretto255_add(p, q):
     Add two points on the ristretto255 curve.
 
     Example - Point addition commutes in L:
+
     >>> x = crypto_core_ristretto255_random()
     >>> y = crypto_core_ristretto255_from_hash(b'\x70'*64)
     >>> z1 = crypto_core_ristretto255_add(x, y)
@@ -96,6 +97,7 @@ def crypto_core_ristretto255_sub(p, q):
     Subtract a point from another on the ristretto255 curve.
 
     Example - Point subtraction is the inverse of addition:
+
     >>> p = crypto_core_ristretto255_from_hash(b'\x70'*64)
     >>> mask = crypto_core_ristretto255_random()
     >>> masked = crypto_core_ristretto255_add(p, mask)
@@ -186,6 +188,7 @@ def crypto_core_ristretto255_scalar_random():  # (unsigned char *r);
     order of the group ``(2^252 + 27742317777372353535851937790883648493)``.
 
     Example - All valid scalars have an inverse:
+
     >>> s = crypto_core_ristretto255_scalar_random()
     >>> p = crypto_core_ristretto255_random()
     >>> masked = crypto_scalarmult_ristretto255(s, p)
@@ -216,6 +219,7 @@ def crypto_core_ristretto255_scalar_invert(p):
     is the order of the main subgroup.
 
     Example - All scalars have a multiplicative inverse:
+
     >>> s = crypto_core_ristretto255_scalar_random()
     >>> p = crypto_core_ristretto255_random()
     >>> masked = crypto_scalarmult_ristretto255(s, p)
@@ -255,13 +259,15 @@ def crypto_core_ristretto255_scalar_negate(p):
     is the order of the main subgroup.
 
     Example - All scalars have an additive inverse:
+
     >>> s = crypto_core_ristretto255_scalar_random()
     >>> s_inv = crypto_core_ristretto255_scalar_negate(s)
     >>> zero = crypto_core_ristretto255_scalar_add(s, s_inv)
     >>> s == crypto_core_ristretto255_scalar_add(s, zero)
     True
 
-    Example - Multiplication by zero is not defined in the subgroup {point * s | scalars s}.
+    Example - Multiplication by zero is not defined in the subgroup {point * s | scalars s}:
+
     >>> p = crypto_core_ristretto255_random()
     >>> try:
     ...     zero_p = crypto_scalarmult_ristretto255(zero, p)
@@ -300,6 +306,7 @@ def crypto_core_ristretto255_scalar_complement(p):
     the main subgroup.
 
     Example - All scalars have an additive complement:
+
     >>> s = crypto_core_ristretto255_scalar_random()
     >>> s_comp = crypto_core_ristretto255_scalar_complement(s)
     >>> one = crypto_core_ristretto255_scalar_add(s, s_comp)
@@ -336,6 +343,7 @@ def crypto_core_ristretto255_scalar_add(p, q):
     the main subgroup.
 
     Example - Addition of two scalars is commutative:
+
     >>> s1 = crypto_core_ristretto255_scalar_random()
     >>> s2 = crypto_core_ristretto255_scalar_random()
     >>> s12 = crypto_core_ristretto255_scalar_add(s1, s2)
@@ -376,6 +384,7 @@ def crypto_core_ristretto255_scalar_sub(p, q):
     order of the main subgroup.
 
     Example - Subtraction is the inverse of addition:
+
     >>> s1 = crypto_core_ristretto255_scalar_random()
     >>> s2 = crypto_core_ristretto255_scalar_random()
     >>> s1_plus_s2 = crypto_core_ristretto255_scalar_add(s1, s2)
@@ -415,6 +424,7 @@ def crypto_core_ristretto255_scalar_mul(p, q):
     order of the main subgroup.
 
     Example - Multiplication of two scalars is commutative:
+
     >>> s1 = crypto_core_ristretto255_scalar_random()
     >>> s2 = crypto_core_ristretto255_scalar_random()
     >>> s1s2 = crypto_core_ristretto255_scalar_mul(s1, s2)
@@ -455,6 +465,7 @@ def crypto_core_ristretto255_scalar_reduce(p):
     of the main subgroup.
 
     Example - Reduce a large value to a valid scalar:
+
     >>> x = bytes.fromhex('FF'*32)
     >>> s = crypto_core_ristretto255_scalar_reduce(x)
     >>> p = crypto_core_ristretto255_random()
@@ -529,7 +540,8 @@ def crypto_scalarmult_ristretto255(n, p):
     by setting to zero the bits in position [0, 1, 2, 255] and setting
     to one the bit in position 254.
 
-    Example - Scalar multiplication is an invertible operation.
+    Example - Scalar multiplication is an invertible operation:
+
     >>> s = crypto_core_ristretto255_scalar_random()
     >>> p = crypto_core_ristretto255_random()
     >>> masked = crypto_scalarmult_ristretto255(s, p)
@@ -595,6 +607,7 @@ def randombytes_buf_deterministic(size, seed):
     from a seed
 
     Example - Get the first 32 bytes from a stream seeded by 0x7070...70:
+
     >>> r1 = randombytes_buf_deterministic(32, b'\x70'*32)
     >>> r2 = randombytes_buf_deterministic(40, b'\x70'*32)
     >>> r1 == r2[:32]
