@@ -34,6 +34,10 @@ def crypto_core_ristretto255_is_valid_point(p):  # (const unsigned char *p);
     Check if ``p`` represents a point on the ristretto255 curve, in canonical
     form, on the main subgroup, and that the point doesn't have a small order.
 
+    >>> p = crypto_core_ristretto255_random()
+    ... crypto_core_ristretto255_is_valid_point(p)
+    True
+
     :param p: a :py:data:`.crypto_core_ristretto255_BYTES` long bytes sequence
               representing a point on the ristretto255 curve
     :type p: bytes
