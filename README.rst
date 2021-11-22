@@ -29,21 +29,25 @@ rbcl supports Python 3.7, 3.8 and 3.9.
 
     from rbcl import *
 
-    x = crypto_core_ristretto255_random()
-    assert crypto_core_ristretto255_is_valid_point(x)
+    p = crypto_core_ristretto255_random()
+    assert crypto_core_ristretto255_is_valid_point(p)
 
-    y = crypto_core_ristretto255_from_hash(b'\xF0'*64)
-    assert crypto_core_ristretto255_is_valid_point(y)
+    q = crypto_core_ristretto255_from_hash(b'\xF0'*64)
+    assert crypto_core_ristretto255_is_valid_point(q)
 
-    z1 = crypto_core_ristretto255_add(x, y)
-    z2 = crypto_core_ristretto255_add(y, x)
-    assert z1 == z2  # Assert that point addition commutes (in L)
+    # Assert that point addition commutes (in L)
+    p_plus_q = crypto_core_ristretto255_add(p, q)
+    q_plus_p = crypto_core_ristretto255_add(q, p)
+    assert p_plus_q == q_plus_p
 
+    # Assert that point multiplication (by a scalar) is repeated addition (in L)
     s1 = crypto_core_ristretto255_scalar_random()
     s2 = crypto_core_ristretto255_scalar_random()
-    w1 = crypto_scalarmult_ristretto255(s1, crypto_scalarmult_ristretto255(s2, x))
-    w2 = crypto_scalarmult_ristretto255(s2, crypto_scalarmult_ristretto255(s1, x))
-    assert w1 == w2  # Assert that point multiplication (by a scalar) is repeated addition (in L)
+    p_times_s1_times_s2 = crypto_scalarmult_ristretto255(s1, crypto_scalarmult_ristretto255(s2, p))  # (p s1) s2
+    p_times_s2_times_s1 = crypto_scalarmult_ristretto255(s2, crypto_scalarmult_ristretto255(s1, p))  # (p s2) s1
+    p_times_s1_s1 = crypto_scalarmult_ristretto255(crypto_core_ristretto255_scalar_mul(s1, s2), p)   # p (s1 s2)
+    assert p_times_s1_times_s2 == p_times_s2_times_s1  # Addition is commutative over scalar multiplication.
+    assert p_times_s1_times_s2 == p_times_s1_s1        # Scalar multiplication is associative.
 
 The following bindings are made available:
 
